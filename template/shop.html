@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shop | Chatpata Junction</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  background:#fff6eb;
+}
+
+/* ===== MARQUEE PICKLES ===== */
+.pickle-marquee{
+  background:#fff7dd;
+  padding:30px 0;
+  border-top:5px solid #ff9800;
+  border-bottom:5px solid #ff9800;
+  overflow:hidden;
+  position:relative;
+}
+
+.marquee-track{
+  display:flex;
+  width:max-content;
+  animation:scrollMarquee 35s linear infinite;
+}
+
+.marquee-track img{
+  width:180px;
+  height:140px;
+  object-fit:cover;
+  margin:0 22px;
+  border-radius:20px;
+  background:#fff;
+  padding:6px;
+  box-shadow:0 8px 18px rgba(0,0,0,0.25);
+  transition:transform 0.35s ease;
+  flex-shrink:0;
+}
+
+.marquee-track img:hover{
+  transform:scale(1.12);
+}
+
+.qty-btn{
+      padding: 4px 10px;
+      border: none;
+      background: #ffd700;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+      margin-right:5px;
+      margin-top:8px;
+    }
+
+    .remove-btn{
+      background: crimson;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      float: right;
+      margin-top:8px;
+    }
+
+@keyframes scrollMarquee{
+  0%{
+    transform:translateX(0);
+  }
+  100%{
+    transform:translateX(-50%);
+  }
+}
+
+@media(max-width:768px){
+  .marquee-track img{
+    width:140px;
+    height:110px;
+    margin:0 14px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+{% include 'header.html' %}
+
+<div class="pickle-marquee">
+  <div class="marquee-track">
+    <img src="{% static 'images/marquee/aam papad.png' %}" alt="Aam Papad Pickle">
+    <img src="{% static 'images/by-preservation/vinegar-based/gherkins.png' %}" alt="Gherkins Pickle">
+    <img src="{% static 'images/marquee/hog plum.png' %}" alt="Hog Plum Pickle">
+    <img src="{% static 'images/marquee/onion pickle.png' %}" alt="Onion Pickle">
+    <img src="{% static 'images/marquee/neem flower.png' %}" alt="Neem Flower Pickle">
+    <img src="{% static 'images/marquee/raw mango pickle.png' %}" alt="Raw Mango Pickle">
+    <img src="{% static 'images/marquee/tamarind dried.png' %}" alt="Tamarind Dried Pickle">
+    <img src="{% static 'images/marquee/prawn pickle.png' %}" alt="Prawn Pickle">
+    <img src="{% static 'images/marquee/bitter gourd.png' %}" alt="Bitter Gourd Pickle">
+    <img src="{% static 'images/marquee/karondo.png' %}" alt="Karondo Pickle">
+    <img src="{% static 'images/marquee/radish.png' %}" alt="Radish Pickle">
+    <img src="{% static 'images/marquee/rajasthani pickle.png' %}" alt="Rajasthani Pickle">
+
+   
+  </div>
+</div>
+
+<div class="category-container">
+    {% for cat in categories %}
+    <div class="category-card">
+
+        {% if cat.Category_Image %}
+            <img src="/media/{{ cat.Category_Image }}" alt="{{ cat.Category_Name }}">
+        {% else %}
+            <img src="https://via.placeholder.com/150">
+        {% endif %}
+
+        <h3>{{ cat.Category_Name }}</h3>
+        <p>{{ cat.Category_Description }}</p>
+
+        <a href="{% url 'category_products' cat.Category_ID %}">
+            <button>View Products</button>
+        </a>
+
+    </div>
+    {% endfor %}
+</div>
+
+{% include 'footer.html' %}
+
+<script>
+  const shopBtn = document.getElementById("shopBtn");
+  const shopMenu = document.getElementById("shopMenu");
+  const cartBtn = document.getElementById("cartBtn");
+  const cartSidebar = document.getElementById("cartSidebar");
+
+  // Shop dropdown toggle
+  shopBtn.addEventListener("click", function(e) {
+    e.preventDefault();
+    shopMenu.classList.toggle("show");
+  });
+
+  // Submenu toggle
+  function toggleSub(event, id) {
+    event.stopPropagation();
+    const submenu = document.getElementById(id);
+
+    if (submenu.style.display === "block") {
+      submenu.style.display = "none";
+    } else {
+      submenu.style.display = "block";
+    }
+  }
+
+  // Click outside dropdown -> close
+  document.addEventListener("click", function(e) {
+    if (!e.target.closest(".dropdown")) {
+      shopMenu.classList.remove("show");
+
+      document.querySelectorAll(".submenu-content").forEach(function(menu) {
+        menu.style.display = "none";
+      });
+    }
+  });
+
+  // Cart open
+  cartBtn.addEventListener("click", function() {
+    cartSidebar.classList.add("active");
+  });
+
+  // Cart close
+  function closeCart() {
+    cartSidebar.classList.remove("active");
+  }
+
+  // Dummy search function
+  function searchProducts() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    console.log("Searching for:", input);
+  }
+</script>
+
+</body>
+</html>

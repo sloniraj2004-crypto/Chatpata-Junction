@@ -1,0 +1,192 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us | Chatpata Junction</title>
+
+<style>
+.about-container{
+  max-width:1200px;
+  margin:50px auto;
+  background:#fff8dc;
+  border-radius:30px;
+  padding:50px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.3);
+}
+
+.about-container h1{
+  text-align:center;
+  font-size:42px;
+  color:#8B4513;
+  margin-bottom:20px;
+}
+
+.about-container p{
+  font-size:17px;
+  line-height:1.8;
+  color:#333;
+  margin-bottom:20px;
+}
+
+/* FEATURES */
+.features{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
+  margin-top:40px;
+}
+
+.feature-card{
+  background:#fff3e0;
+  border-radius:20px;
+  padding:25px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+  transition:0.3s;
+}
+
+.feature-card:hover{
+  transform:translateY(-5px);
+}
+
+.feature-card h3{
+  margin-bottom:10px;
+  color:#8B4513;
+}
+
+.feature-card p{
+  font-size:15px;
+  margin-bottom:0;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .about-container{
+    padding:30px 20px;
+    margin:30px 15px;
+  }
+
+  .about-container h1{
+    font-size:32px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+{% include 'header.html' %}
+
+<!-- ABOUT CONTENT -->
+<div class="about-container">
+  <h1>About Chatpata Junction 🌶</h1>
+
+  <p>
+    Chatpata Junction is your one-stop destination for authentic,
+    homemade Indian pickles made with love, tradition, and bold flavors.
+    From spicy Andhra pickles to sweet Gujarati delights, we bring the
+    true taste of India straight to your plate.
+  </p>
+
+  <p>
+    Our mission is simple — preserve age-old recipes while maintaining
+    hygiene, quality, and freshness. Every jar tells a story of culture,
+    spice, and passion.
+  </p>
+
+  <div class="features">
+    <div class="feature-card">
+      <h3>🥭 Authentic Recipes</h3>
+      <p>Traditional methods passed down through generations.</p>
+    </div>
+
+    <div class="feature-card">
+      <h3>🌶 Premium Ingredients</h3>
+      <p>Handpicked spices & farm-fresh produce only.</p>
+    </div>
+
+    <div class="feature-card">
+      <h3>🛒 Easy Shopping</h3>
+      <p>Simple browsing, quick cart, and smooth checkout.</p>
+    </div>
+
+    <div class="feature-card">
+      <h3>❤️ Customer Love</h3>
+      <p>Made with care for pickle lovers across India.</p>
+    </div>
+  </div>
+</div>
+
+{% include 'footer.html' %}
+
+<script>
+document.getElementById("searchInput").addEventListener("keydown", function(e){
+  if(e.key === "Enter"){
+    const value = this.value.trim().toLowerCase();
+
+    if(value.includes("spicy")){
+      window.location.href = "{% url 'care' %}";
+    }else if(value.includes("sweet")){
+      window.location.href = "{% url 'topa' %}";
+    }else if(value.includes("sour")){
+      window.location.href = "{% url 'hero' %}";
+    }
+  }
+});
+
+  const shopBtn = document.getElementById("shopBtn");
+  const shopMenu = document.getElementById("shopMenu");
+  const cartBtn = document.getElementById("cartBtn");
+  const cartSidebar = document.getElementById("cartSidebar");
+
+  // Shop dropdown toggle
+  shopBtn.addEventListener("click", function(e) {
+    e.preventDefault();
+    shopMenu.classList.toggle("show");
+  });
+
+  // Submenu toggle
+  function toggleSub(event, id) {
+    event.stopPropagation();
+    const submenu = document.getElementById(id);
+
+    if (submenu.style.display === "block") {
+      submenu.style.display = "none";
+    } else {
+      submenu.style.display = "block";
+    }
+  }
+
+  // Click outside dropdown -> close
+  document.addEventListener("click", function(e) {
+    if (!e.target.closest(".dropdown")) {
+      shopMenu.classList.remove("show");
+
+      document.querySelectorAll(".submenu-content").forEach(function(menu) {
+        menu.style.display = "none";
+      });
+    }
+  });
+
+  // Cart open
+  cartBtn.addEventListener("click", function() {
+    cartSidebar.classList.add("active");
+  });
+
+  // Cart close
+  function closeCart() {
+    cartSidebar.classList.remove("active");
+  }
+
+  // Dummy search function
+  function searchProducts() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    console.log("Searching for:", input);
+  }
+
+</script>
+
+</body>
+</html>

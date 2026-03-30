@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Return Policy | Chatpata Junction</title>
+
+<style>
+.policy-container{
+  max-width:900px;
+  margin:60px auto;
+  background:#fff8dc;
+  padding:45px;
+  border-radius:25px;
+  box-shadow:0 15px 30px rgba(0,0,0,0.3);
+}
+
+.policy-container h1{
+  text-align:center;
+  color:#8b4513;
+  margin-bottom:30px;
+}
+
+.policy-container h3{
+  margin-top:25px;
+  color:#5a2d0c;
+}
+
+.policy-container p{
+  margin-top:10px;
+  line-height:1.8;
+  font-size:15px;
+  color:#333;
+}
+
+@media(max-width:768px){
+  .policy-container{
+    margin:30px 15px;
+    padding:28px 20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+{% include 'header.html' %}
+
+<div class="policy-container">
+  <h1>Return Policy</h1>
+
+  <p>
+    At <strong>Chatpata Junction</strong>, customer satisfaction is our top priority.
+    Since our products are food items, we follow a strict return policy.
+  </p>
+
+  <h3>❌ No Returns on Opened Products</h3>
+  <p>
+    Due to hygiene and safety reasons, we do not accept returns on opened or used pickle jars.
+  </p>
+
+  <h3>📦 Damaged or Wrong Product</h3>
+  <p>
+    If you receive a damaged product or the wrong item, please contact us within
+    <strong>24 hours</strong> of delivery with photos of the product and packaging.
+  </p>
+
+  <h3>🔄 Replacement Policy</h3>
+  <p>
+    After verification, we will arrange a replacement at no extra cost.
+    Refunds are issued only if replacement is not possible.
+  </p>
+
+  <h3>💰 Refund Process</h3>
+  <p>
+    Approved refunds will be processed within <strong>5–7 business days</strong>
+    to the original payment method.
+  </p>
+
+  <h3>📞 Contact Support</h3>
+  <p>
+    For return-related queries, please email us at
+    <strong>support@chatpatajunction.com</strong>.
+  </p>
+</div>
+
+{% include 'footer.html' %}
+<script>
+  const shopBtn = document.getElementById("shopBtn");
+  const shopMenu = document.getElementById("shopMenu");
+  const cartBtn = document.getElementById("cartBtn");
+  const cartSidebar = document.getElementById("cartSidebar");
+
+  // Shop dropdown toggle
+  shopBtn.addEventListener("click", function(e) {
+    e.preventDefault();
+    shopMenu.classList.toggle("show");
+  });
+
+  // Submenu toggle
+  function toggleSub(event, id) {
+    event.stopPropagation();
+    const submenu = document.getElementById(id);
+
+    if (submenu.style.display === "block") {
+      submenu.style.display = "none";
+    } else {
+      submenu.style.display = "block";
+    }
+  }
+
+  // Click outside dropdown -> close
+  document.addEventListener("click", function(e) {
+    if (!e.target.closest(".dropdown")) {
+      shopMenu.classList.remove("show");
+
+      document.querySelectorAll(".submenu-content").forEach(function(menu) {
+        menu.style.display = "none";
+      });
+    }
+  });
+
+  // Cart open
+  cartBtn.addEventListener("click", function() {
+    cartSidebar.classList.add("active");
+  });
+
+  // Cart close
+  function closeCart() {
+    cartSidebar.classList.remove("active");
+  }
+
+  // Dummy search function
+  function searchProducts() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    console.log("Searching for:", input);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatpata Junction | Home</title>
+
+<style>
+body{
+  background:#fff;
+}
+
+/* ===== HERO ===== */
+.hero{
+  min-height:90vh;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:60px;
+  padding:0 8%;
+  color:white;
+  background:linear-gradient(135deg,#5a2a0c,#9c4a12,#d97706);
+  flex-wrap:wrap;
+}
+
+.hero img{
+  width:300px;
+  max-width:80%;
+  border-radius:28px;
+  background:rgba(255,255,255,0.15);
+  padding:10px;
+  box-shadow:0 25px 60px rgba(0,0,0,0.45);
+}
+.hero img:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 20px rgba(255,215,0,0.4);
+}
+
+.hero-content{
+  max-width:600px;
+  background:rgba(0,0,0,0.25);
+  padding:40px;
+  border-radius:30px;
+}
+.hero-content:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 20px rgba(255,215,0,0.4);
+}
+
+.hero-content h1{
+  font-size:56px;
+  margin-bottom:15px;
+  font-weight:900;
+}
+
+.hero-content p{
+  font-size:20px;
+  line-height:1.7;
+}
+
+.shop-now-btn{
+  display:inline-block;
+  margin-top:25px;
+  padding:14px 38px;
+  font-size:18px;
+  font-weight:800;
+  color:#8b3a00;
+  text-decoration:none;
+  background:linear-gradient(135deg,#FFD700,#FFA500);
+  border-radius:999px;
+  transition:0.3s ease;
+}
+
+.shop-now-btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 20px rgba(255,215,0,0.4);
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:992px){
+  .hero{
+    text-align:center;
+    justify-content:center;
+    padding:50px 20px;
+  }
+
+  .hero-content h1{
+    font-size:40px;
+  }
+}
+
+@media(max-width:768px){
+  .hero{
+    min-height:auto;
+    gap:30px;
+  }
+
+  .hero img{
+    width:280px;
+  }
+
+  .hero-content{
+    padding:28px 20px;
+  }
+
+  .hero-content h1{
+    font-size:32px;
+  }
+
+  .hero-content p{
+    font-size:17px;
+  }
+
+  .shop-now-btn{
+    padding:12px 28px;
+    font-size:16px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+{% include 'header.html' %}
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+
+  <img src="{% static 'images/home.png' %}" alt="Pickles">
+
+  <div class="hero-content">
+    <h1>Authentic Desi Pickles 😋</h1>
+
+    <p>
+      Traditional homemade achaar with real Indian taste –
+      spicy, sweet & full of love ❤️
+    </p>
+
+    <a href="{% url 'now' %}" class="shop-now-btn">Shop Now</a>
+  </div>
+
+</section>
+
+{% include 'footer.html' %}
+<script>
+  const shopBtn = document.getElementById("shopBtn");
+  const shopMenu = document.getElementById("shopMenu");
+  const cartBtn = document.getElementById("cartBtn");
+  const cartSidebar = document.getElementById("cartSidebar");
+
+  // Shop dropdown toggle
+  shopBtn.addEventListener("click", function(e) {
+    e.preventDefault();
+    shopMenu.classList.toggle("show");
+  });
+
+  // Submenu toggle
+  function toggleSub(event, id) {
+    event.stopPropagation();
+    const submenu = document.getElementById(id);
+
+    if (submenu.style.display === "block") {
+      submenu.style.display = "none";
+    } else {
+      submenu.style.display = "block";
+    }
+  }
+
+  // Click outside dropdown -> close
+  document.addEventListener("click", function(e) {
+    if (!e.target.closest(".dropdown")) {
+      shopMenu.classList.remove("show");
+
+      document.querySelectorAll(".submenu-content").forEach(function(menu) {
+        menu.style.display = "none";
+      });
+    }
+  });
+
+  // Cart open
+  cartBtn.addEventListener("click", function() {
+    cartSidebar.classList.add("active");
+  });
+
+  // Cart close
+  function closeCart() {
+    cartSidebar.classList.remove("active");
+  }
+
+  // Dummy search function
+  function searchProducts() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    console.log("Searching for:", input);
+  }
+</script>
+</body>
+</html>

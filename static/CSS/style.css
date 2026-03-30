@@ -1,0 +1,22 @@
+.add-cart{
+  background:linear-gradient(135deg,#32cd32,#1e8f1e);
+}
+
+.buy-now{
+  background:linear-gradient(135deg,#ff4500,#ff0000);
+}
+
+.btn-group button:hover{
+  opacity:0.9;
+  transform:translateY(-2px);
+}
+
+@media(max-width:768px){
+  .product-img img{
+    height:300px;
+  }
+
+  .btn-group{
+    flex-direction:column;
+  }
+}

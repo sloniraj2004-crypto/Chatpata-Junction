@@ -1,0 +1,557 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offers | Chatpata Junction</title>
+
+<style>
+body{
+  background:linear-gradient(135deg,#ff9a56,#ff6a00);
+}
+
+/* ===== OFFERS ===== */
+.offers-container{
+  max-width:1300px;
+  margin:50px auto;
+  padding:20px;
+}
+
+.qty-btn{
+      padding: 4px 10px;
+      border: none;
+      background: #ffd700;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+      margin-right:5px;
+      margin-top:8px;
+    }
+
+    .remove-btn{
+      background: crimson;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      float: right;
+      margin-top:8px;
+    }
+    
+.offers-title{
+  text-align:center;
+  font-size:42px;
+  color:#8B4513;
+  margin-bottom:40px;
+}
+
+.offer-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:30px;
+}
+
+.offer-card{
+  background:#fff8dc;
+  border-radius:25px;
+  padding:25px;
+  text-align:center;
+  box-shadow:0 12px 30px rgba(0,0,0,0.25);
+  position:relative;
+  transition:0.3s ease;
+}
+
+.offer-card:hover{
+  transform:translateY(-10px);
+}
+
+.offer-badge{
+  position:absolute;
+  top:-12px;
+  right:-12px;
+  background:crimson;
+  color:white;
+  padding:8px 14px;
+  border-radius:30px;
+  font-weight:700;
+  font-size:14px;
+}
+
+.offer-img{
+  width:100%;
+  height:400px;
+  object-fit:cover;
+  border-radius:15px;
+  margin-bottom:15px;
+  border:2px solid #D2691E;
+}
+
+.offer-card h3{
+  color:#8B4513;
+  margin-bottom:10px;
+}
+
+.offer-card p{
+  font-size:15px;
+  color:#444;
+  margin-bottom:15px;
+}
+
+.offer-price{
+  font-size:20px;
+  font-weight:800;
+  color:#c0392b;
+  margin-bottom:15px;
+}
+
+.offer-actions{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:15px;
+}
+
+.add-cart-btn,
+.buy-now-btn{
+  flex:1;
+  padding:12px 0;
+  border-radius:30px;
+  border:none;
+  font-weight:700;
+  cursor:pointer;
+  color:#fff;
+  transition:0.3s ease;
+}
+
+.add-cart-btn{
+  background:linear-gradient(135deg,#32cd32,#1e8f1e);
+}
+
+.buy-now-btn{
+  background:linear-gradient(135deg,#ff4500,#ff0000);
+}
+
+.add-cart-btn:hover,
+.buy-now-btn:hover{
+  opacity:0.9;
+  transform:translateY(-2px);
+}
+
+@media(max-width:768px){
+  .offers-title{
+    font-size:32px;
+  }
+
+  .offer-img{
+    height:300px;
+  }
+
+  .offer-actions{
+    flex-direction:column;
+  }
+}
+</style>
+</head>
+
+<body>
+
+{% include 'header.html' %}
+
+<div class="offers-container">
+  <h1 class="offers-title">Today's Hot Offers 🔥</h1>
+
+  <div class="offer-grid">
+
+    <div class="offer-card">
+      <div class="offer-badge">20% OFF</div>
+      <img src="{% static 'images/fruit.png' %}" alt="Fruit Pickle" class="offer-img">
+      <h3>Fruit Pickle Combo</h3>
+      <p>Buy 2 jars of our premium fruit pickles & save more!</p>
+      <div class="offer-price">₹399</div>
+      <div class="offer-actions">
+        <button class="add-cart-btn" type="button" onclick="addToCart('Fruit Pickle Combo',399)">🛒 Add to Cart</button>
+        <button class="buy-now-btn" type="button" onclick="buyNow('Fruit Pickle Combo',399)">⚡ Buy Now</button>
+      </div>
+    </div>
+
+    <div class="offer-card">
+      <div class="offer-badge">BUY 1 GET 1</div>
+      <img src="{% static 'images/nonveg.png' %}" alt="Non-Veg Pickle" class="offer-img">
+      <h3>Non-Veg Special</h3>
+      <p>Authentic Non-Vegetarian delights at half price.</p>
+      <div class="offer-price">₹499</div>
+      <div class="offer-actions">
+        <button class="add-cart-btn" type="button" onclick="addToCart('Non-Veg Special',499)">🛒 Add to Cart</button>
+        <button class="buy-now-btn" type="button" onclick="buyNow('Non-Veg Special',499)">⚡ Buy Now</button>
+      </div>
+    </div>
+
+    <div class="offer-card">
+      <div class="offer-badge">15% OFF</div>
+      <img src="{% static 'images/desi.png' %}" alt="Vegetable Pickle" class="offer-img">
+      <h3>Desi Veggie Mix</h3>
+      <p>Traditional regional vegetables in spicy oil.</p>
+      <div class="offer-price">₹229</div>
+      <div class="offer-actions">
+        <button class="add-cart-btn" type="button" onclick="addToCart('Desi Veggie Mix',229)">🛒 Add to Cart</button>
+        <button class="buy-now-btn" type="button" onclick="buyNow('Desi Veggie Mix',229)">⚡ Buy Now</button>
+      </div>
+    </div>
+
+    <div class="offer-card">
+      <div class="offer-badge">FLAT ₹100 OFF</div>
+      <img src="{% static 'images/oil-based.png' %}" alt="Oil Based Pickles" class="offer-img">
+      <h3>Oil Based Pickles</h3>
+      <p>Pure mustard oil & hand-ground spices.</p>
+      <div class="offer-price">₹349</div>
+      <div class="offer-actions">
+        <button class="add-cart-btn" type="button" onclick="addToCart('Oil Based Pickles',349)">🛒 Add to Cart</button>
+        <button class="buy-now-btn" type="button" onclick="buyNow('Oil Based Pickles',349)">⚡ Buy Now</button>
+      </div>
+    </div>
+
+    <div class="offer-card">
+      <div class="offer-badge">NEW</div>
+      <img src="{% static 'images/regional.png' %}" alt="Regional Special" class="offer-img">
+      <h3>Regional Special</h3>
+      <p>Traditional pickles from different states.</p>
+      <div class="offer-price">₹299</div>
+      <div class="offer-actions">
+        <button class="add-cart-btn" type="button" onclick="addToCart('Regional Special',299)">🛒 Add to Cart</button>
+        <button class="buy-now-btn" type="button" onclick="buyNow('Regional Special',299)">⚡ Buy Now</button>
+      </div>
+    </div>
+
+    <div class="offer-card">
+      <div class="offer-badge">25% OFF</div>
+      <img src="{% static 'images/sweet.png' %}" alt="Sweet & Sour Pack" class="offer-img">
+      <h3>Sweet & Sour Pack</h3>
+      <p>Perfect balance of sweetness & tang.</p>
+      <div class="offer-price">₹269</div>
+      <div class="offer-actions">
+        <button class="add-cart-btn" type="button" onclick="addToCart('Sweet & Sour Pack',269)">🛒 Add to Cart</button>
+        <button class="buy-now-btn" type="button" onclick="buyNow('Sweet & Sour Pack',269)">⚡ Buy Now</button>
+      </div>
+    </div>
+
+    <div class="offer-card">
+      <div class="offer-badge">LIMITED</div>
+      <img src="{% static 'images/spicy.png' %}" alt="Spicy Lovers Box" class="offer-img">
+      <h3>Spicy Lovers Box 🌶</h3>
+      <p>Extra spicy pickles for true spice lovers.</p>
+      <div class="offer-price">₹459</div>
+      <div class="offer-actions">
+        <button class="add-cart-btn" type="button" onclick="addToCart('Spicy Lovers Box',459)">🛒 Add to Cart</button>
+        <button class="buy-now-btn" type="button" onclick="buyNow('Spicy Lovers Box',459)">⚡ Buy Now</button>
+      </div>
+    </div>
+
+    <div class="offer-card">
+      <div class="offer-badge">COMBO DEAL</div>
+      <img src="{% static 'images/combo.png' %}" alt="Family Combo Pack" class="offer-img">
+      <h3>Family Combo Pack</h3>
+      <p>Best value combo for the whole family.</p>
+      <div class="offer-price">₹699</div>
+      <div class="offer-actions">
+        <button class="add-cart-btn" type="button" onclick="addToCart('Family Combo Pack',699)">🛒 Add to Cart</button>
+        <button class="buy-now-btn" type="button" onclick="buyNow('Family Combo Pack',699)">⚡ Buy Now</button>
+      </div>
+    </div>
+
+    <div class="offer-card">
+      <div class="offer-badge">HOT DEAL 🔥</div>
+      <img src="{% static 'images/sundried.png' %}" alt="Sun Dried Pickles" class="offer-img">
+      <h3>Sun Dried Pickles</h3>
+      <p>Traditional sun-dried homemade flavours.</p>
+      <div class="offer-price">₹319</div>
+      <div class="offer-actions">
+        <button class="add-cart-btn" type="button" onclick="addToCart('Sun Dried Pickles',319)">🛒 Add to Cart</button>
+        <button class="buy-now-btn" type="button" onclick="buyNow('Sun Dried Pickles',319)">⚡ Buy Now</button>
+      </div>
+    </div>
+
+    <div class="offer-card">
+      <div class="offer-badge">EXTRA SPICY</div>
+      <img src="{% static 'images/red.png' %}" alt="Red Chilli Pickle" class="offer-img">
+      <h3>Red Chilli Pickle</h3>
+      <p>Fiery chilli pickle for spice lovers.</p>
+      <div class="offer-price">₹199</div>
+      <div class="offer-actions">
+        <button class="add-cart-btn" type="button" onclick="addToCart('Red Chilli Pickle',199)">🛒 Add to Cart</button>
+        <button class="buy-now-btn" type="button" onclick="buyNow('Red Chilli Pickle',199)">⚡ Buy Now</button>
+      </div>
+    </div>
+
+    <div class="offer-card">
+      <div class="offer-badge">BEST SELLER</div>
+      <img src="{% static 'images/mango.png' %}" alt="Mango Pickle Classic" class="offer-img">
+      <h3>Mango Pickle Classic</h3>
+      <p>India’s all-time favourite mango pickle.</p>
+      <div class="offer-price">₹249</div>
+      <div class="offer-actions">
+        <button class="add-cart-btn" type="button" onclick="addToCart('Mango Pickle Classic',249)">🛒 Add to Cart</button>
+        <button class="buy-now-btn" type="button" onclick="buyNow('Mango Pickle Classic',249)">⚡ Buy Now</button>
+      </div>
+    </div>
+
+    <div class="offer-card">
+      <div class="offer-badge">SPECIAL</div>
+      <img src="{% static 'images/vinegar.png' %}" alt="Vinegar Based Pickles" class="offer-img">
+      <h3>Vinegar Based Pickles</h3>
+      <p>Light, tangy & long-lasting flavours.</p>
+      <div class="offer-price">₹279</div>
+      <div class="offer-actions">
+        <button class="add-cart-btn" type="button" onclick="addToCart('Vinegar Based Pickles',279)">🛒 Add to Cart</button>
+        <button class="buy-now-btn" type="button" onclick="buyNow('Vinegar Based Pickles',279)">⚡ Buy Now</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% include 'footer.html' %}
+
+<script>
+const shopBtn = document.getElementById("shopBtn");
+  const shopMenu = document.getElementById("shopMenu");
+  const cartBtn = document.getElementById("cartBtn");
+  const cartSidebar = document.getElementById("cartSidebar");
+  const cartItems = document.getElementById("cartItems");
+  const cartCount = document.getElementById("cartCount");
+  const cartTotal = document.getElementById("cartTotal");
+  const searchInput = document.getElementById("searchInput");
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  function searchProducts() {
+    if (!searchInput) return;
+    const input = searchInput.value.toLowerCase();
+    const cards = document.querySelectorAll(".product-card");
+
+    cards.forEach(card => {
+      const text = card.innerText.toLowerCase();
+      card.style.display = text.includes(input) ? "" : "none";
+    });
+  }
+
+  if (cartBtn && cartSidebar) {
+    cartBtn.addEventListener("click", function () {
+      cartSidebar.classList.add("active");
+      loadCart();
+    });
+  }
+
+  function openCart() {
+    if (cartSidebar) {
+      cartSidebar.classList.add("active");
+      loadCart();
+    }
+  }
+
+  function closeCart() {
+    if (cartSidebar) {
+      cartSidebar.classList.remove("active");
+    }
+  }
+
+  function addToCart(name, price) {
+    fetch("{% url 'add_to_cart' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({
+        name: name,
+        price: price
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Add to cart request failed");
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("addToCart response:", data);
+      renderCart(data.cart || [], data.count || 0, data.total || 0);
+      openCart();
+    })
+    .catch(error => {
+      console.error("Add to cart error:", error);
+      alert("Product add nahi ho raha. Console check karo.");
+    });
+  }
+
+  function buyNow(name, price) {
+    fetch("{% url 'add_to_cart' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({
+        name: name,
+        price: price
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Buy now request failed");
+      }
+      return response.json();
+    })
+    .then(() => {
+      window.location.href = "{% url 'kok' %}";
+    })
+    .catch(error => {
+      console.error("Buy now error:", error);
+      alert("Buy now kaam nahi kar raha.");
+    });
+  }
+
+  function loadCart() {
+    fetch("{% url 'get_cart_data' %}")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Load cart request failed");
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("loadCart response:", data);
+        renderCart(data.cart || [], data.count || 0, data.total || 0);
+      })
+      .catch(error => {
+        console.error("Load cart error:", error);
+      });
+  }
+
+  function renderCart(cart, count, total) {
+    if (!cartItems || !cartTotal) return;
+
+    cartItems.innerHTML = "";
+
+    if (cart.length === 0) {
+      cartItems.innerHTML = "<p>Your cart is empty.</p>";
+    } else {
+      cart.forEach((item, index) => {
+        cartItems.innerHTML += `
+          <div class="cart-item">
+            <h4>${item.name}</h4>
+            ₹${item.price} × ${item.qty}<br><br>
+            <button class="qty-btn" onclick="changeQty(${index},1)">+</button>
+            <button class="qty-btn" onclick="changeQty(${index},-1)">−</button>
+            <button class="remove-btn" onclick="removeItem(${index})">Delete</button>
+          </div>
+        `;
+      });
+    }
+
+    cartTotal.innerText = total;
+
+    if (cartCount) {
+      cartCount.innerText = count;
+    }
+  }
+
+  function changeQty(index, change) {
+    fetch("{% url 'change_cart_qty' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({
+        index: index,
+        change: change
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Change qty request failed");
+      }
+      return response.json();
+    })
+    .then(data => {
+      renderCart(data.cart || [], data.count || 0, data.total || 0);
+    })
+    .catch(error => {
+      console.error("Change qty error:", error);
+    });
+  }
+
+  function removeItem(index) {
+    fetch("{% url 'remove_cart_item' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({
+        index: index
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Remove item request failed");
+      }
+      return response.json();
+    })
+    .then(data => {
+      renderCart(data.cart || [], data.count || 0, data.total || 0);
+    })
+    .catch(error => {
+      console.error("Remove item error:", error);
+    });
+  }
+
+  if (shopBtn && shopMenu) {
+    shopBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      shopMenu.classList.toggle("show");
+    });
+  }
+
+  function toggleSub(event, id) {
+    event.stopPropagation();
+    const submenu = document.getElementById(id);
+    if (submenu) {
+      submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+    }
+  }
+
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".dropdown")) {
+      if (shopMenu) {
+        shopMenu.classList.remove("show");
+      }
+
+      document.querySelectorAll(".submenu-content").forEach(function (menu) {
+        menu.style.display = "none";
+      });
+    }
+  });
+
+  loadCart();
+
+</script>
+
+</body>
+</html>

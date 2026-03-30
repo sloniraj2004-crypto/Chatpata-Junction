@@ -1,0 +1,514 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard | Chatpata Junction</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Segoe UI',sans-serif;
+    }
+
+    body{
+      background:#f7efe4;
+      color:#6b3b0d;
+    }
+
+    .dashboard-container{
+      display:flex;
+      min-height:100vh;
+    }
+
+    .main-content{
+      margin-left:290px;
+      width:calc(100% - 290px);
+      padding:28px;
+    }
+
+    .top-bar{
+      background:#ffffffcc;
+      border-radius:24px;
+      padding:26px 32px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:26px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.06);
+    }
+
+    .top-bar h1{
+      font-size:34px;
+      color:#9a4d10;
+      font-weight:800;
+    }
+
+    .admin-badge{
+      background:#f2dfc6;
+      color:#9a4d10;
+      padding:15px 22px;
+      border-radius:18px;
+      font-size:18px;
+      font-weight:700;
+    }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:24px;
+      margin-bottom:28px;
+    }
+
+    .stat-card{
+      background:#fff;
+      border-radius:28px;
+      padding:26px 24px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.05);
+      border-left:8px solid #db7521;
+      transition:0.3s;
+    }
+
+    .stat-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 14px 24px rgba(0,0,0,0.08);
+    }
+
+    .stat-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:16px;
+    }
+
+    .stat-top i{
+      font-size:28px;
+      color:#db7521;
+      background:#fff3e7;
+      padding:14px;
+      border-radius:16px;
+    }
+
+    .stat-card h3{
+      font-size:19px;
+      color:#9a4d10;
+      font-weight:700;
+    }
+
+    .stat-card p{
+      font-size:34px;
+      color:#db7521;
+      font-weight:800;
+      margin-top:8px;
+    }
+
+    .section-box{
+      background:#f2f2f2;
+      border-radius:28px;
+      padding:28px;
+      margin-bottom:28px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.05);
+    }
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:22px;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .section-box h2{
+      font-size:24px;
+      color:#9a4d10;
+      font-weight:800;
+    }
+
+    .mini-text{
+      color:#9a4d10;
+      font-size:14px;
+      font-weight:600;
+      background:#f2dfc6;
+      padding:8px 14px;
+      border-radius:12px;
+    }
+
+    .table-wrap{
+      overflow-x:auto;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      background:#fff;
+      border-radius:18px;
+      overflow:hidden;
+    }
+
+    thead{
+      background:#e9d9c4;
+    }
+
+    th{
+      padding:16px;
+      text-align:left;
+      color:#8d470e;
+      font-size:16px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    td{
+      padding:16px;
+      border-top:1px solid #f1e4d4;
+      color:#5b3512;
+      font-size:15px;
+      white-space:nowrap;
+    }
+
+    tr:hover{
+      background:#fff8f0;
+    }
+
+    .two-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:24px;
+    }
+
+    .quick-links{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:18px;
+    }
+
+    .quick-card{
+      background:#f2dfc6;
+      border-radius:22px;
+      padding:22px;
+      transition:0.3s;
+      min-height:110px;
+      display:flex;
+      align-items:center;
+    }
+
+    .quick-card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 8px 16px rgba(0,0,0,0.07);
+      background:#ecd3b1;
+    }
+
+    .quick-card a{
+      text-decoration:none;
+      color:#8a4308;
+      font-size:17px;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      width:100%;
+    }
+
+    .quick-card i{
+      font-size:22px;
+      background:#fff7ee;
+      padding:12px;
+      border-radius:14px;
+      color:#b25a11;
+    }
+
+    .status-badge{
+      display:inline-block;
+      padding:7px 12px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .status-pending{
+      background:#fff1c9;
+      color:#9a6700;
+    }
+
+    .status-completed{
+      background:#dff7e4;
+      color:#1f7a35;
+    }
+
+    .status-processing{
+      background:#dfeeff;
+      color:#1f5ea8;
+    }
+
+    @media(max-width:1400px){
+      .quick-links{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+
+    @media(max-width:1200px){
+      .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+
+      .two-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:900px){
+      .main-content{
+        margin-left:0;
+        width:100%;
+      }
+
+      .dashboard-container{
+        flex-direction:column;
+      }
+    }
+
+    @media(max-width:700px){
+      .quick-links{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:600px){
+      .stats-grid{
+        grid-template-columns:1fr;
+      }
+
+      .top-bar{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:14px;
+      }
+
+      .top-bar h1{
+        font-size:28px;
+      }
+
+      .section-box{
+        padding:20px;
+      }
+
+      th, td{
+        padding:12px;
+        font-size:14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+
+  {% include 'asidebar.html' %}
+
+  <div class="main-content">
+    <div class="top-bar">
+      <h1>Admin Dashboard</h1>
+      <div class="admin-badge">Hi, {{ request.session.admin_name }}</div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-top">
+          <h3>Total Products</h3>
+          <i class="fa-solid fa-box-open"></i>
+        </div>
+        <p>{{ total_products }}</p>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-top">
+          <h3>Total Users</h3>
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <p>{{ total_users }}</p>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-top">
+          <h3>Total Orders</h3>
+          <i class="fa-solid fa-bag-shopping"></i>
+        </div>
+        <p>{{ total_orders }}</p>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-top">
+          <h3>Total Revenue</h3>
+          <i class="fa-solid fa-indian-rupee-sign"></i>
+        </div>
+        <p>₹{{ total_revenue }}</p>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="section-box">
+      <div class="section-head">
+        <h2>Quick Actions</h2>
+        <div class="mini-text">Admin Shortcuts</div>
+      </div>
+
+      <div class="quick-links">
+        <div class="quick-card">
+          <a href="{% url 'product' %}">
+            <i class="fa-solid fa-square-plus"></i>
+            Add New Product
+          </a>
+        </div>
+
+        <div class="quick-card">
+          <a href="{% url 'product' %}">
+            <i class="fa-solid fa-pen-to-square"></i>
+            Manage Products
+          </a>
+        </div>
+
+        <div class="quick-card">
+          <a href="{% url 'aorders' %}">
+            <i class="fa-solid fa-cart-shopping"></i>
+            View Orders
+          </a>
+        </div>
+
+        <div class="quick-card">
+          <a href="{% url 'users' %}">
+            <i class="fa-solid fa-user-group"></i>
+            View Users
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECENT PRODUCTS + ORDERS -->
+    <div class="two-grid">
+
+      <div class="section-box">
+        <div class="section-head">
+          <h2>Recent Products</h2>
+          <div class="mini-text">Latest Added</div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in recent_products %}
+              <tr>
+                <td>{{ p.0 }}</td>
+                <td>{{ p.1 }}</td>
+                <td>{{ p.2 }}</td>
+                <td>₹{{ p.3 }}</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="4">No products found</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section-box">
+        <div class="section-head">
+          <h2>Recent Orders</h2>
+          <div class="mini-text">Latest Orders</div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Order No</th>
+                <th>Customer</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for o in recent_orders %}
+              <tr>
+                <td>{{ o.0 }}</td>
+                <td>{{ o.1 }}</td>
+                <td>₹{{ o.2 }}</td>
+                <td>
+                  {% if o.3 == 'Pending' %}
+                    <span class="status-badge status-pending">{{ o.3 }}</span>
+                  {% elif o.3 == 'Completed' %}
+                    <span class="status-badge status-completed">{{ o.3 }}</span>
+                  {% else %}
+                    <span class="status-badge status-processing">{{ o.3 }}</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="4">No orders found</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RECENT USERS -->
+    <div class="section-box">
+      <div class="section-head">
+        <h2>Recent Users</h2>
+        <div class="mini-text">Newest Registrations</div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>User ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for u in recent_users %}
+            <tr>
+              <td>{{ u.0 }}</td>
+              <td>{{ u.1 }}</td>
+              <td>{{ u.2 }}</td>
+              <td>{{ u.3 }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4">No users found</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

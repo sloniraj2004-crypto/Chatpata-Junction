@@ -1,0 +1,246 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact & Feedback | Chatpata Junction</title>
+
+<style>
+.contact-container{
+  max-width:1100px;
+  margin:60px auto;
+  background:#fff8dc;
+  border-radius:30px;
+  display:flex;
+  overflow:hidden;
+  box-shadow:0 15px 40px rgba(0,0,0,0.3);
+}
+
+.contact-info{
+  flex:1;
+  background:linear-gradient(135deg,#8B4513,#D2691E);
+  color:#fff;
+  padding:40px;
+}
+
+.contact-info h2{
+  font-size:32px;
+  margin-bottom:20px;
+  color:#FFD700;
+}
+
+.contact-info p{
+  margin:15px 0;
+  font-size:16px;
+}
+
+.contact-info span{
+  display:block;
+  margin-top:10px;
+  font-weight:600;
+}
+
+.contact-form{
+  flex:1;
+  padding:40px;
+}
+
+.contact-form h2{
+  font-size:30px;
+  margin-bottom:20px;
+  color:#8B4513;
+}
+
+.contact-form input,
+.contact-form textarea,
+.contact-form select{
+  width:100%;
+  padding:14px;
+  margin-bottom:15px;
+  border-radius:12px;
+  border:2px solid #d2691e;
+  outline:none;
+  font-size:15px;
+}
+
+.contact-form textarea{
+  resize:none;
+  height:120px;
+}
+
+.contact-form button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(135deg,#32cd32,#1e8f1e);
+  color:white;
+  font-size:18px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.contact-form button:hover{
+  opacity:0.9;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .contact-container{
+    flex-direction:column;
+    margin:30px 15px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+{% include 'header.html' %}
+
+<div class="contact-container">
+
+  <div class="contact-info">
+    <h2>Get in Touch 🌶</h2>
+    <p>Questions ya feedback? Humein zaroor batayein!</p>
+
+    <span>📍 Address:</span>
+    <p>Chatpata Junction, India</p>
+
+    <span>📞 Phone:</span>
+    <p>+91 8670555733</p>
+
+    <span>📧 Email:</span>
+    <p>withlove@chatpatajunction.com</p>
+  </div>
+
+  <div class="contact-form">
+    <h2>Contact / Feedback</h2>
+
+    <input type="text" name="name" placeholder="Enter Your Name"
+oninput="this.value=this.value.replace(/[^a-zA-Z\s]/g,'')" required>
+    <input type="email" id="email" placeholder="Your Email">
+    <input type="text" id="subject" placeholder="Subject">
+
+    <select id="type">
+      <option value="">Select Message Type</option>
+      <option value="Contact Query">Contact Query</option>
+      <option value="Feedback">Feedback</option>
+      <option value="Suggestion">Suggestion</option>
+    </select>
+
+    <textarea id="message" placeholder="Write your message or feedback here..."></textarea>
+
+    <button type="button" onclick="sendMessage()">Submit</button>
+  </div>
+
+</div>
+
+{% include 'footer.html' %}
+
+<script>
+function sendMessage(){
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const subject = document.getElementById("subject").value.trim();
+  const type = document.getElementById("type").value;
+  const message = document.getElementById("message").value.trim();
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if(name === "" || email === "" || subject === "" || type === "" || message === ""){
+    alert("⚠ Please fill all the fields");
+    return;
+  }
+
+  if(!emailPattern.test(email)){
+    alert("❌ Invalid email address");
+    return;
+  }
+
+  alert("✅ Thank you for your " + type + " 🌶\nTeam Chatpata Junction will contact you soon!");
+
+  document.getElementById("name").value = "";
+  document.getElementById("email").value = "";
+  document.getElementById("subject").value = "";
+  document.getElementById("type").value = "";
+  document.getElementById("message").value = "";
+}
+
+document.getElementById("searchInput").addEventListener("keydown", function(e){
+  if(e.key === "Enter"){
+    const value = this.value.trim().toLowerCase();
+
+    if(value.includes("vegetable")){
+      window.location.href = "{% url 'adven' %}";
+    }else if(value.includes("fruit")){
+      window.location.href = "{% url 'humble' %}";
+    }else if(value.includes("regional")){
+      window.location.href = "{% url 'dare' %}";
+    }else if(value.includes("non")){
+      window.location.href = "{% url 'nontypes' %}";
+    }else if(value.includes("spicy")){
+      window.location.href = "{% url 'care' %}";
+    }else if(value.includes("sweet")){
+      window.location.href = "{% url 'topa' %}";
+    }else if(value.includes("sour")){
+      window.location.href = "{% url 'hero' %}";
+    }
+  }
+});
+
+  const shopBtn = document.getElementById("shopBtn");
+  const shopMenu = document.getElementById("shopMenu");
+  const cartBtn = document.getElementById("cartBtn");
+  const cartSidebar = document.getElementById("cartSidebar");
+
+  // Shop dropdown toggle
+  shopBtn.addEventListener("click", function(e) {
+    e.preventDefault();
+    shopMenu.classList.toggle("show");
+  });
+
+  // Submenu toggle
+  function toggleSub(event, id) {
+    event.stopPropagation();
+    const submenu = document.getElementById(id);
+
+    if (submenu.style.display === "block") {
+      submenu.style.display = "none";
+    } else {
+      submenu.style.display = "block";
+    }
+  }
+
+  // Click outside dropdown -> close
+  document.addEventListener("click", function(e) {
+    if (!e.target.closest(".dropdown")) {
+      shopMenu.classList.remove("show");
+
+      document.querySelectorAll(".submenu-content").forEach(function(menu) {
+        menu.style.display = "none";
+      });
+    }
+  });
+
+  // Cart open
+  cartBtn.addEventListener("click", function() {
+    cartSidebar.classList.add("active");
+  });
+
+  // Cart close
+  function closeCart() {
+    cartSidebar.classList.remove("active");
+  }
+
+  // Dummy search function
+  function searchProducts() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    console.log("Searching for:", input);
+  }
+
+</script>
+
+</body>
+</html>

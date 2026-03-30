@@ -1,0 +1,124 @@
+ {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+  .sidebar{
+    width:290px;
+    background:linear-gradient(180deg,#9c4f11,#d8731d);
+    color:#fff;
+    padding:28px 20px;
+    position:fixed;
+    left:0;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+    border-top-right-radius:18px;
+    border-bottom-right-radius:18px;
+    box-shadow:4px 0 18px rgba(0,0,0,0.12);
+  }
+
+  .sidebar h2{
+    font-size:30px;
+    color:#ffd400;
+    line-height:1.1;
+    margin-bottom:10px;
+    font-weight:800;
+    text-align:center;
+  }
+
+  .sidebar .panel-text{
+    font-size:17px;
+    text-align:center;
+    margin:14px 0 28px;
+    font-weight:600;
+    color:#fff3e0;
+  }
+
+  .menu{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+
+  .menu a{
+    text-decoration:none;
+    color:white;
+    background:rgba(255,255,255,0.10);
+    padding:18px 20px;
+    border-radius:18px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    font-size:18px;
+    font-weight:600;
+    transition:0.3s;
+  }
+
+  .menu a i{
+    width:24px;
+    text-align:center;
+    font-size:18px;
+  }
+
+  .menu a:hover,
+  .menu a.active{
+    background:#ffd400;
+    color:#7a3b00;
+  }
+
+  @media(max-width:900px){
+    .sidebar{
+      position:relative;
+      width:100%;
+      height:auto;
+      border-radius:0;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <h2>Chatpata<br>Junction</h2>
+  <div class="panel-text">Admin Panel</div>
+
+  <div class="menu">
+    <a href="{% url 'adashboard' %}" class="{% if request.resolver_match.url_name == 'adashboard' %}active{% endif %}">
+      <i class="fa-solid fa-chart-line"></i> Dashboard
+    </a>
+
+   <a href="{% url 'product' %}" class="{% if request.resolver_match.url_name == 'product' %}active{% endif %}">
+      <i class="fa-solid fa-box-open"></i> Manage Products
+    </a> 
+
+    <a href="{% url 'admin_categories' %}" class="{% if request.resolver_match.url_name == 'admin_category' %}active{% endif %}">
+      <i class="fa-solid fa-bag-shopping"></i> Manage Category
+    </a>
+
+    <a href="{% url 'users' %}" class="{% if request.resolver_match.url_name == 'users' %}active{% endif %}">
+      <i class="fa-solid fa-users"></i> Users
+    </a>
+
+    <a href="{% url 'aorders' %}" class="{% if request.resolver_match.url_name == 'aorders' %}active{% endif %}">
+      <i class="fa-solid fa-bag-shopping"></i> View Orders
+    </a>
+
+    <a href="{% url 'apayment' %}" class="{% if request.resolver_match.url_name == 'apayment' %}active{% endif %}">
+      <i class="fa-solid fa-credit-card"></i> Payments
+    </a>
+
+    <a href="{% url 'view_feedback' %}" class="{% if request.resolver_match.url_name == 'afeedback' %}active{% endif %}">
+      <i class="fa-solid fa-comments"></i> Feedback
+    </a>
+
+    <a href="{% url 'home' %}">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </a>
+  </div>
+</div>
+</body>
+</html>

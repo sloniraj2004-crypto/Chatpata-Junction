@@ -1,0 +1,673 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Users | Chatpata Junction</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body{
+  background:linear-gradient(135deg, #f9f2e8, #f4e3cf);
+  color:#6b3b0d;
+}
+
+.dashboard-container{
+  display:flex;
+  min-height:100vh;
+}
+
+.main-content{
+  margin-left:290px;
+  width:calc(100% - 290px);
+  padding:30px;
+}
+
+.top-bar{
+  background:#fff;
+  border-radius:24px;
+  padding:24px 30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:28px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+.top-bar h1{
+  font-size:36px;
+  color:#9a4d10;
+  font-weight:800;
+}
+
+.admin-badge{
+  background:linear-gradient(135deg,#f3dfc4,#ead0aa);
+  color:#9a4d10;
+  padding:12px 18px;
+  border-radius:18px;
+  font-size:16px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.admin-badge i{
+  background:#fff;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.section-box{
+  background:#ffffffd9;
+  border-radius:28px;
+  padding:28px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.06);
+}
+
+.table-wrap{
+  width:100%;
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  background:#fff;
+  border-radius:20px;
+  overflow:hidden;
+  min-width:900px;
+}
+
+thead{
+  background:linear-gradient(135deg,#ecdcc7,#e6cfb0);
+}
+
+th{
+  padding:18px 16px;
+  text-align:left;
+  color:#8d470e;
+  font-size:16px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+td{
+  padding:18px 16px;
+  border-top:1px solid #f2e5d6;
+  color:#5b3512;
+  font-size:15px;
+  vertical-align:middle;
+}
+
+tbody tr{
+  transition:0.3s ease;
+}
+
+tbody tr:hover{
+  background:#fff8f1;
+}
+
+.profile-cell{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:180px;
+}
+
+.profile-img{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#f2dfc6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  flex-shrink:0;
+  border:2px solid #f1d5b2;
+}
+
+.profile-img img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.profile-img i{
+  color:#9a4d10;
+  font-size:16px;
+}
+
+.action-box{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:9px 14px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:700;
+  transition:0.25s ease;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+}
+
+.view{
+  background:#ffd54f;
+  color:#6b3b0d;
+}
+
+.view:hover{
+  background:#ffca28;
+}
+
+.block{
+  background:#e74c3c;
+  color:#fff;
+}
+
+.block:hover{
+  background:#cf3f30;
+}
+
+.empty{
+  text-align:center;
+  padding:40px 20px;
+  font-weight:700;
+  color:#9a4d10;
+}
+
+.empty i{
+  font-size:32px;
+  margin-bottom:10px;
+  display:block;
+}
+
+.alert{
+  background:#e8fff0;
+  border:1px solid #b9e7c7;
+  color:#1c6b38;
+  padding:14px 18px;
+  border-radius:14px;
+  margin-bottom:18px;
+  font-weight:600;
+}
+
+/* Modal */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.45);
+  z-index:9999;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:100%;
+  max-width:560px;
+  background:#fff;
+  border-radius:24px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.18);
+  overflow:hidden;
+  animation:popup .25s ease;
+}
+
+@keyframes popup{
+  from{
+    opacity:0;
+    transform:translateY(20px) scale(0.96);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.modal-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:20px 24px;
+  background:linear-gradient(135deg,#f3dfc4,#ead0aa);
+}
+
+.modal-header h2{
+  color:#8d470e;
+  font-size:24px;
+}
+
+.close-btn{
+  background:#fff;
+  border:none;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:18px;
+  color:#8d470e;
+}
+
+.modal-body{
+  padding:24px;
+}
+
+.user-preview{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin-bottom:20px;
+  padding-bottom:18px;
+  border-bottom:1px solid #f0e1d0;
+}
+
+.user-preview-img{
+  width:78px;
+  height:78px;
+  border-radius:50%;
+  background:#f2dfc6;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:3px solid #f1d5b2;
+  flex-shrink:0;
+}
+
+.user-preview-img img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.user-preview-img i{
+  font-size:28px;
+  color:#9a4d10;
+}
+
+.user-preview-text h3{
+  font-size:24px;
+  color:#8d470e;
+  margin-bottom:6px;
+}
+
+.user-preview-text p{
+  color:#7a5731;
+  font-size:14px;
+}
+
+.detail-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.detail-card{
+  background:#fff8f1;
+  border:1px solid #f1dfc8;
+  border-radius:16px;
+  padding:14px;
+}
+
+.detail-card span{
+  display:block;
+  font-size:12px;
+  color:#9a6a39;
+  margin-bottom:6px;
+  font-weight:700;
+  text-transform:uppercase;
+}
+
+.detail-card strong{
+  color:#5b3512;
+  word-break:break-word;
+}
+
+.block-modal-text{
+  font-size:16px;
+  color:#6b3b0d;
+  line-height:1.6;
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:22px;
+}
+
+.btn-secondary{
+  background:#f3eee7;
+  color:#7a4b1d;
+}
+
+.btn-danger{
+  background:#e74c3c;
+  color:#fff;
+}
+
+@media(max-width:900px){
+  .main-content{
+    margin-left:0;
+    width:100%;
+    padding:18px;
+  }
+
+  .top-bar{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:14px;
+  }
+
+  .top-bar h1{
+    font-size:28px;
+  }
+
+  table{
+    min-width:760px;
+  }
+}
+
+@media(max-width:640px){
+  .detail-grid{
+    grid-template-columns:1fr;
+  }
+
+  .user-preview{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="dashboard-container">
+  {% include 'asidebar.html' %}
+
+  <div class="main-content">
+    <div class="top-bar">
+      <h1>Users List</h1>
+      <div class="admin-badge">
+        <i class="fa-solid fa-user"></i>
+        Hi, {{ request.session.admin_name|default:"Admin" }}
+      </div>
+    </div>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="section-box">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Address</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for u in users %}
+            <tr>
+              <td>{{ u.0 }}</td>
+
+              <td>
+                <div class="profile-cell">
+                  <div class="profile-img">
+                    {% if u.5 %}
+                      <img src="/media/{{ u.5 }}" alt="User">
+                    {% else %}
+                      <i class="fa-solid fa-user"></i>
+                    {% endif %}
+                  </div>
+                  <span>{{ u.1 }}</span>
+                </div>
+              </td>
+
+              <td>{{ u.2 }}</td>
+              <td>{{ u.3 }}</td>
+              <td>{{ u.4 }}</td>
+
+              <td>
+                <div class="action-box">
+                  <button
+                    type="button"
+                    class="btn view view-btn"
+                    data-id="{{ u.0 }}"
+                    data-name="{{ u.1|escapejs }}"
+                    data-email="{{ u.2|default:''|escapejs }}"
+                    data-phone="{{ u.3|default:''|escapejs }}"
+                    data-address="{{ u.4|default:''|escapejs }}"
+                    data-image="{% if u.5 %}/media/{{ u.5 }}{% else %}{% endif %}"
+                  >
+                    <i class="fa-solid fa-eye"></i> View
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn block block-btn"
+                    data-id="{{ u.0 }}"
+                    data-name="{{ u.1|escapejs }}"
+                  >
+                    <i class="fa-solid fa-ban"></i> Block
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="empty">
+                <i class="fa-solid fa-users"></i>
+                No Users Found
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View Modal -->
+<div class="modal" id="viewModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>User Details</h2>
+      <button class="close-btn" type="button" onclick="closeViewModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="user-preview">
+        <div class="user-preview-img" id="modalUserImageBox">
+          <i class="fa-solid fa-user" id="modalUserIcon"></i>
+          <img id="modalUserImage" src="" alt="User" style="display:none;">
+        </div>
+
+        <div class="user-preview-text">
+          <h3 id="modalName">User Name</h3>
+          <p id="modalEmailTop">user@email.com</p>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-card">
+          <span>Customer ID</span>
+          <strong id="modalId">-</strong>
+        </div>
+
+        <div class="detail-card">
+          <span>Phone</span>
+          <strong id="modalPhone">-</strong>
+        </div>
+
+        <div class="detail-card" style="grid-column:1 / -1;">
+          <span>Email</span>
+          <strong id="modalEmail">-</strong>
+        </div>
+
+        <div class="detail-card" style="grid-column:1 / -1;">
+          <span>Address</span>
+          <strong id="modalAddress">-</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Block Modal -->
+<div class="modal" id="blockModal">
+  <div class="modal-box" style="max-width:480px;">
+    <div class="modal-header">
+      <h2>Confirm Block</h2>
+      <button class="close-btn" type="button" onclick="closeBlockModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <p class="block-modal-text">
+        Are you sure you want to block
+        <strong id="blockUserName">this user</strong>?
+      </p>
+
+      <form method="POST" id="blockForm">
+        {% csrf_token %}
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeBlockModal()">Cancel</button>
+          <button type="submit" class="btn btn-danger">Yes, Block</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+const viewModal = document.getElementById('viewModal');
+const blockModal = document.getElementById('blockModal');
+
+const modalId = document.getElementById('modalId');
+const modalName = document.getElementById('modalName');
+const modalEmail = document.getElementById('modalEmail');
+const modalEmailTop = document.getElementById('modalEmailTop');
+const modalPhone = document.getElementById('modalPhone');
+const modalAddress = document.getElementById('modalAddress');
+const modalUserImage = document.getElementById('modalUserImage');
+const modalUserIcon = document.getElementById('modalUserIcon');
+
+const blockUserName = document.getElementById('blockUserName');
+const blockForm = document.getElementById('blockForm');
+
+document.querySelectorAll('.view-btn').forEach(button => {
+  button.addEventListener('click', function () {
+    const id = this.dataset.id || '-';
+    const name = this.dataset.name || 'User';
+    const email = this.dataset.email || '-';
+    const phone = this.dataset.phone || '-';
+    const address = this.dataset.address || '-';
+    const image = this.dataset.image || '';
+
+    modalId.textContent = id;
+    modalName.textContent = name;
+    modalEmail.textContent = email;
+    modalEmailTop.textContent = email;
+    modalPhone.textContent = phone;
+    modalAddress.textContent = address;
+
+    if (image.trim() !== '') {
+      modalUserImage.src = image;
+      modalUserImage.style.display = 'block';
+      modalUserIcon.style.display = 'none';
+    } else {
+      modalUserImage.src = '';
+      modalUserImage.style.display = 'none';
+      modalUserIcon.style.display = 'block';
+    }
+
+    viewModal.classList.add('show');
+  });
+});
+
+document.querySelectorAll('.block-btn').forEach(button => {
+  button.addEventListener('click', function () {
+    const id = this.dataset.id;
+    const name = this.dataset.name || 'this user';
+
+    blockUserName.textContent = name;
+    blockForm.action = `/block-user/${id}/`;
+    blockModal.classList.add('show');
+  });
+});
+
+function closeViewModal() {
+  viewModal.classList.remove('show');
+}
+
+function closeBlockModal() {
+  blockModal.classList.remove('show');
+}
+
+viewModal.addEventListener('click', function(e){
+  if(e.target === viewModal){
+    closeViewModal();
+  }
+});
+
+blockModal.addEventListener('click', function(e){
+  if(e.target === blockModal){
+    closeBlockModal();
+  }
+});
+
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    closeViewModal();
+    closeBlockModal();
+  }
+});
+</script>
+
+</body>
+</html>

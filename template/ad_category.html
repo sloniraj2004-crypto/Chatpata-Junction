@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Categories</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background:#fff8f0;
+            margin:0;
+            padding:20px;
+        }
+        .container{
+            max-width:1200px;
+            margin:auto;
+        }
+        .page-title{
+            text-align:center;
+            font-size:36px;
+            font-weight:800;
+            color:#8B4513;
+            margin-bottom:25px;
+        }
+        .form-box{
+            background:#fff;
+            padding:20px;
+            border-radius:14px;
+            box-shadow:0 4px 12px rgba(0,0,0,0.12);
+            margin-bottom:25px;
+            margin-left:320px;
+        }
+        .form-box input, .form-box textarea, .form-box select{
+            width:100%;
+            padding:12px;
+            margin-bottom:12px;
+            border:1px solid #ccc;
+            border-radius:10px;
+            font-size:15px;
+        }
+        .form-box button{
+            background:linear-gradient(135deg,#8B4513,#D2691E);
+            color:#fff;
+            border:none;
+            padding:12px 20px;
+            border-radius:10px;
+            cursor:pointer;
+            font-weight:bold;
+        }
+        table{
+            width:70%;
+            border-collapse:collapse;
+            background:#fff;
+            border-radius:12px;
+            overflow:hidden;
+            box-shadow:0 4px 12px rgba(0,0,0,0.12);
+            margin-left:320px;
+        }
+        table th, table td{
+            padding:14px;
+            border-bottom:1px solid #eee;
+            text-align:center;
+        }
+        table th{
+            background:#8B4513;
+            color:#fff;
+        }
+        .btn{
+            padding:8px 14px;
+            border-radius:8px;
+            text-decoration:none;
+            color:white;
+            font-size:14px;
+            margin:0 3px;
+        }
+        .edit{ background:#28a745; }
+        .delete{ background:#dc3545; }
+        .msg{
+
+            padding:12px;
+            border-radius:10px;
+            margin-bottom:15px;
+            margin-left:310px;
+            background:#ffe8cc;
+            color:#8a4b08;
+        }
+    </style>
+</head>
+<body>
+    {% include 'asidebar.html' %}
+<div class="container">
+    <h2 class="page-title">Manage Categories</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="msg">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="form-box">
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="category_name" placeholder="Category Name">
+            <input type="text" name="category_image" placeholder="Category Image Path">
+            <textarea name="category_description" placeholder="Category Description"></textarea>
+            <select name="status">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+            </select>
+            <button type="submit">Add Category</button>
+        </form>
+    </div>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        {% for cat in categories %}
+        <tr>
+            <td>{{ cat.Category_ID }}</td>
+            <td>{{ cat.Category_Name }}</td>
+            <td>{{ cat.Category_Image }}</td>
+            <td>{{ cat.Category_Description }}</td>
+            <td>{{ cat.Status }}</td>
+            <td>
+                <a href="{% url 'edit_category' cat.Category_ID %}" class="btn edit">Edit</a>
+                <a href="{% url 'delete_category' cat.Category_ID %}" class="btn delete" onclick="return confirm('Delete this category?')">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+</body>
+</html>

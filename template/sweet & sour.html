@@ -1,0 +1,543 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sweet & Sour Pickles | Chatpata Junction</title>
+  <script src="{% static 'JS/cart.js' %}"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Segoe UI',sans-serif;
+    }
+
+    body{
+      background:#fff6eb;
+    }
+
+    /* ===== PRODUCTS ===== */
+    .products{
+      max-width:1300px;
+      margin:auto;
+      padding:30px 20px;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:25px;
+    }
+
+    .product-card{
+      background:#fff8dc;
+      border-radius:25px;
+      overflow:hidden;
+      box-shadow:0 12px 30px rgba(0,0,0,0.2);
+      transition:0.3s;
+    }
+
+    .product-card:hover{
+      transform:translateY(-6px);
+    }
+
+    .product-img img{
+      width:100%;
+      height:400px;
+      object-fit:cover;
+      display:block;
+    }
+
+    .product-info{
+      padding:20px;
+      background:#fff6d5;
+    }
+
+    .tag{
+      display:inline-block;
+      background:crimson;
+      color:white;
+      padding:6px 14px;
+      border-radius:20px;
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    .product-info p{
+      margin:5px 0;
+      font-size:15px;
+      color:#333;
+    }
+
+    .weight{
+      font-size:14px;
+    }
+
+    .price{
+      font-size:30px;
+      color:crimson;
+      font-weight:800;
+      margin:12px 0;
+    }
+
+    .action-buttons{
+      display:flex;
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .action-buttons button{
+      flex:1;
+      border:none;
+      height:56px;
+      border-radius:50px;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
+      transition:all 0.3s ease;
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      box-shadow:0 6px 14px rgba(0,0,0,0.12);
+    }
+
+    .action-buttons button:hover{
+      transform:translateY(-2px);
+    }
+
+    .add-cart{
+      background:#37b233;
+    }
+
+    .add-cart:hover{
+      background:#2f9a2b;
+    }
+
+    .buy-now-btn{
+      background:#ff3300;
+    }
+
+    .buy-now-btn:hover{
+      background:#e62e00;
+    }
+
+    /* ===== CART SIDEBAR ===== */
+    .cart-sidebar{
+      position:fixed;
+      top:0;
+      right:-400px;
+      width:380px;
+      height:100%;
+      background:#fff6d5;
+      box-shadow:-10px 0 30px rgba(0,0,0,0.3);
+      transition:0.4s;
+      z-index:99999;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .cart-sidebar.active{
+      right:0;
+    }
+
+    .cart-header{
+      padding:20px;
+      background:#8b4513;
+      color:white;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .close-cart{
+      cursor:pointer;
+      font-size:20px;
+    }
+
+    .cart-items{
+      flex:1;
+      padding:15px;
+      overflow-y:auto;
+    }
+
+    .cart-item{
+      background:#fff;
+      border-radius:15px;
+      padding:10px;
+      margin-bottom:10px;
+    }
+
+    .cart-item h4{
+      margin-bottom:5px;
+      color:#8b4513;
+    }
+
+    .qty-btn{
+      padding:4px 10px;
+      border:none;
+      background:#ffd700;
+      font-weight:bold;
+      cursor:pointer;
+      border-radius:8px;
+      margin-right:5px;
+      margin-top:8px;
+    }
+
+    .remove-btn{
+      background:crimson;
+      color:white;
+      border:none;
+      padding:5px 10px;
+      border-radius:8px;
+      cursor:pointer;
+      float:right;
+      margin-top:8px;
+    }
+
+    .cart-footer{
+      padding:15px;
+      border-top:2px solid #ddd;
+    }
+
+    .checkout-btn{
+      width:100%;
+      margin-top:12px;
+      border:none;
+      padding:12px;
+      border-radius:25px;
+      background:linear-gradient(135deg,#ff4500,#ff0000);
+      color:white;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .checkout-btn:hover{
+      opacity:0.9;
+    }
+
+    @media(max-width:768px){
+      .cart-sidebar{
+        width:100%;
+      }
+
+      .product-img img{
+        height:280px;
+      }
+
+      .action-buttons{
+        flex-direction:column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+{% include 'header.html' %}
+
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h2>🛒 Your Cart</h2>
+    <span class="close-cart" onclick="closeCart()">✖</span>
+  </div>
+
+  <div class="cart-items" id="cartItems"></div>
+
+  <div class="cart-footer">
+    <h3>Total: ₹<span id="cartTotal">0</span></h3>
+    <a href="{% url 'kok' %}">
+      <button class="checkout-btn" type="button">Proceed to Checkout</button>
+    </a>
+  </div>
+</div>
+
+<div class="products">
+
+  <div class="product-card">
+    <div class="product-img">
+      <img src="{% static 'images/by-taste/sweet & sour/aam papad.png' %}" alt="Aam Papad Pickle">
+    </div>
+    <div class="product-info">
+      <span class="tag">Aam Papad</span>
+      <p>Sweet & Sour Aam Papad Pickle</p>
+      <p class="weight">Weight: 400g</p>
+      <div class="price">₹199</div>
+      <div class="action-buttons">
+        <button class="add-cart" onclick="addToCart('Aam Papad Pickle', 199)" type="button">
+          <span>🛒</span>
+          <span>Add to Cart</span>
+        </button>
+        <button class="buy-now-btn" onclick="buyNow('Aam Papad Pickle', 199)" type="button">
+          <span>⚡</span>
+          <span>Buy Now</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card">
+    <div class="product-img">
+      <img src="{% static 'images/by-taste/sweet & sour/mango sweet.png' %}" alt="Mango Pickle">
+    </div>
+    <div class="product-info">
+      <span class="tag">Mango</span>
+      <p>Sweet & Sour Mango Pickle</p>
+      <p class="weight">Weight: 500g</p>
+      <div class="price">₹299</div>
+      <div class="action-buttons">
+        <button class="add-cart" onclick="addToCart('Mango Pickle', 299)" type="button">
+          <span>🛒</span>
+          <span>Add to Cart</span>
+        </button>
+        <button class="buy-now-btn" onclick="buyNow('Mango Pickle', 299)" type="button">
+          <span>⚡</span>
+          <span>Buy Now</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card">
+    <div class="product-img">
+      <img src="{% static 'images/by-taste/sweet & sour/pomegranate.png' %}" alt="Pomegranate Pickle">
+    </div>
+    <div class="product-info">
+      <span class="tag">Pomegranate</span>
+      <p>Sweet & Sour Pomegranate Pickle</p>
+      <p class="weight">Weight: 500g</p>
+      <div class="price">₹299</div>
+      <div class="action-buttons">
+        <button class="add-cart" onclick="addToCart('Pomegranate Pickle', 299)" type="button">
+          <span>🛒</span>
+          <span>Add to Cart</span>
+        </button>
+        <button class="buy-now-btn" onclick="buyNow('Pomegranate Pickle', 299)" type="button">
+          <span>⚡</span>
+          <span>Buy Now</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card">
+    <div class="product-img">
+      <img src="{% static 'images/by-taste/sweet & sour/tamarind sweet.png' %}" alt="Tamarind Pickle">
+    </div>
+    <div class="product-info">
+      <span class="tag">Tamarind</span>
+      <p>Sweet & Sour Tamarind Pickle</p>
+      <p class="weight">Weight: 400g</p>
+      <div class="price">₹199</div>
+      <div class="action-buttons">
+        <button class="add-cart" onclick="addToCart('Tamarind Pickle', 199)" type="button">
+          <span>🛒</span>
+          <span>Add to Cart</span>
+        </button>
+        <button class="buy-now-btn" onclick="buyNow('Tamarind Pickle', 199)" type="button">
+          <span>⚡</span>
+          <span>Buy Now</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% include 'footer.html' %}
+<script>  
+const shopBtn = document.getElementById("shopBtn");
+  const shopMenu = document.getElementById("shopMenu");
+  const cartBtn = document.getElementById("cartBtn");
+  const cartSidebar = document.getElementById("cartSidebar");
+  const cartItems = document.getElementById("cartItems");
+  const cartCount = document.getElementById("cartCount");
+  const cartTotal = document.getElementById("cartTotal");
+  const searchInput = document.getElementById("searchInput");
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  function searchProducts() {
+    if (!searchInput) return;
+    const input = searchInput.value.toLowerCase();
+    const cards = document.querySelectorAll(".product-card");
+
+    cards.forEach(card => {
+      const text = card.innerText.toLowerCase();
+      card.style.display = text.includes(input) ? "" : "none";
+    });
+  }
+
+  if (cartBtn && cartSidebar) {
+    cartBtn.addEventListener("click", function () {
+      cartSidebar.classList.add("active");
+      loadCart();
+    });
+  }
+
+  function openCart() {
+    if (cartSidebar) {
+      cartSidebar.classList.add("active");
+      loadCart();
+    }
+  }
+
+  function closeCart() {
+    if (cartSidebar) {
+      cartSidebar.classList.remove("active");
+    }
+  }
+
+  function addToCart(name, price) {
+    fetch("{% url 'add_to_cart' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({
+        name: name,
+        price: price
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      renderCart(data.cart, data.count, data.total);
+      openCart();
+    });
+  }
+
+  function buyNow(name, price) {
+    fetch("{% url 'add_to_cart' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({
+        name: name,
+        price: price
+      })
+    })
+    .then(response => response.json())
+    .then(() => {
+      window.location.href = "{% url 'kok' %}";
+    });
+  }
+
+  function loadCart() {
+    fetch("{% url 'get_cart_data' %}")
+      .then(response => response.json())
+      .then(data => {
+        renderCart(data.cart, data.count, data.total);
+      });
+  }
+
+  function renderCart(cart, count, total) {
+    if (!cartItems || !cartCount || !cartTotal) return;
+
+    cartItems.innerHTML = "";
+
+    if (cart.length === 0) {
+      cartItems.innerHTML = "<p>Your cart is empty.</p>";
+    } else {
+      cart.forEach((item, index) => {
+        cartItems.innerHTML += `
+          <div class="cart-item">
+            <h4>${item.name}</h4>
+            ₹${item.price} × ${item.qty}<br><br>
+            <button class="qty-btn" onclick="changeQty(${index},1)">+</button>
+            <button class="qty-btn" onclick="changeQty(${index},-1)">−</button>
+            <button class="remove-btn" onclick="removeItem(${index})">Delete</button>
+          </div>
+        `;
+      });
+    }
+
+    cartTotal.innerText = total;
+    cartCount.innerText = count;
+  }
+
+  function changeQty(index, change) {
+    fetch("{% url 'change_cart_qty' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({
+        index: index,
+        change: change
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      renderCart(data.cart, data.count, data.total);
+    });
+  }
+
+  function removeItem(index) {
+    fetch("{% url 'remove_cart_item' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({
+        index: index
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      renderCart(data.cart, data.count, data.total);
+    });
+  }
+
+  if (shopBtn && shopMenu) {
+    shopBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      shopMenu.classList.toggle("show");
+    });
+  }
+
+  function toggleSub(event, id) {
+    event.stopPropagation();
+    const submenu = document.getElementById(id);
+    if (submenu) {
+      submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+    }
+  }
+
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".dropdown")) {
+      if (shopMenu) {
+        shopMenu.classList.remove("show");
+      }
+
+      document.querySelectorAll(".submenu-content").forEach(function (menu) {
+        menu.style.display = "none";
+      });
+    }
+  });
+
+  loadCart();
+</script>
+
+</body>
+</html>

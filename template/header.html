@@ -1,0 +1,509 @@
+{% load static %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+.main-header{
+  background:linear-gradient(90deg,#a14f08,#d56f1b);
+  padding:10px 20px;
+  box-shadow:0 4px 14px rgba(0,0,0,0.16);
+  position:relative;
+  z-index:1000;
+}
+
+.navbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:nowrap;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+  flex-shrink:0;
+}
+
+/* LOGO BOX */
+.logo-wrapper{
+  height:55px;
+  width:55px;
+  background:linear-gradient(135deg,#fff8e1,#ffd54f);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+  transition:0.3s;
+}
+
+/* LOGO IMAGE */
+.logo-wrapper img{
+  width:80%;
+  height:auto;
+  object-fit:contain;
+}
+
+/* HOVER EFFECT */
+.logo-wrapper:hover{
+  transform:scale(1.1);
+  box-shadow:0 8px 20px rgba(255,215,0,0.6);
+}
+
+/* BRAND TEXT */
+.brand-name{
+  font-size:18px;
+  font-weight:800;
+  color:#ffd700;
+  letter-spacing:0.5px;
+  text-shadow:0 2px 6px rgba(0,0,0,0.4);
+  white-space:nowrap;
+}
+
+.nav-links{
+  list-style:none;
+  display:flex;
+  align-items:center;
+  gap:22px;
+  flex:1;
+  justify-content:center;
+  min-width:0;
+}
+
+.nav-links li{
+  position:relative;
+}
+
+.nav-links > li > a{
+  color:#fff;
+  text-decoration:none;
+  font-size:0.98rem;
+  font-weight:700;
+  white-space:nowrap;
+  padding:10px 0;
+  display:block;
+}
+
+.nav-links > li > a:hover{
+  color:#ffd700;
+}
+
+.dropdown-menu,
+.submenu{
+  position:absolute;
+  top:42px;
+  left:0;
+  min-width:220px;
+  background:#fffaf3;
+  border-radius:12px;
+  box-shadow:0 10px 24px rgba(0,0,0,0.18);
+  display:none;
+  padding:8px 0;
+  z-index:9999;
+}
+
+.dropdown-menu a,
+.submenu a{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  text-decoration:none;
+  color:#7a3300;
+  font-size:0.92rem;
+  font-weight:600;
+  padding:11px 16px;
+  white-space:nowrap;
+}
+
+.dropdown-menu a:hover,
+.submenu a:hover{
+  background:#fff1dc;
+  color:#d56f1b;
+}
+
+.dropdown:hover > .dropdown-menu{
+  display:block;
+}
+
+.has-submenu{
+  position:relative;
+}
+
+.has-submenu .submenu{
+  top:0;
+  left:100%;
+  margin-left:4px;
+  min-width:210px;
+}
+
+.has-submenu:hover > .submenu{
+  display:block;
+}
+
+.nav-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-shrink:0;
+}
+
+.search-box{
+  position:relative;
+}
+
+.search-box input{
+  width:250px;
+  height:42px;
+  border:none;
+  outline:none;
+  border-radius:24px;
+  padding:0 14px 0 38px;
+  font-size:0.94rem;
+  background:#fff;
+}
+
+.search-box i{
+  position:absolute;
+  left:12px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#9b4d08;
+  font-size:13px;
+}
+
+.search-box:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(255, 215, 0, 0.5);
+}
+
+.btn{
+  height:42px;
+  padding:0 14px;
+  background:#ffbf00;
+  border:none;
+  border-radius:22px;
+  color:#111;
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  font-size:0.92rem;
+  font-weight:700;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(255, 215, 0, 0.5);
+}
+
+.cart-btn{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:0 16px;
+  min-width:95px;
+}
+
+.cart-badge{
+  position:absolute;
+  top:-8px;
+  right:-8px;
+  min-width:24px;
+  height:24px;
+  padding:0 6px;
+  border-radius:50%;
+  background:#ff1744;
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+  border:2px solid #ffbf00;
+}
+
+.cart-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(255, 215, 0, 0.5);
+}
+
+.user-name{
+  background:#ffcc00;
+  height:42px;
+  padding:0 12px;
+  border-radius:22px;
+  font-weight:700;
+  color:#000;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  font-size:14px;
+  white-space:nowrap;
+  max-width:150px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  flex-shrink:1;
+}
+
+.user-name i{
+  font-size:20px;
+  flex-shrink:0;
+}
+
+.user-name span{
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.user-name:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(255, 215, 0, 0.5);
+}
+
+/* CART SIDEBAR */
+.cart-sidebar{
+  position:fixed;
+  top:0;
+  right:-380px;
+  width:360px;
+  max-width:100%;
+  height:100vh;
+  background:#fffaf3;
+  box-shadow:-8px 0 25px rgba(0,0,0,0.22);
+  z-index:10000;
+  display:flex;
+  flex-direction:column;
+  transition:right 0.35s ease;
+}
+
+.cart-sidebar.active{
+  right:0;
+}
+
+.cart-header{
+  background:#a14f08;
+  color:#fff;
+  padding:18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.cart-header h2{
+  font-size:28px;
+  margin:0;
+}
+
+.close-cart{
+  font-size:30px;
+  cursor:pointer;
+  line-height:1;
+}
+
+#cartItems{
+  flex:1;
+  overflow-y:auto;
+  padding:16px;
+}
+
+.cart-footer{
+  border-top:1px solid #ddd;
+  padding:16px;
+  background:#fff3dd;
+}
+
+.cart-footer h3{
+  margin-bottom:12px;
+  font-size:20px;
+  color:#111;
+}
+
+.cart-footer button{
+  width:100%;
+  border:none;
+  background:#ff4d00;
+  color:#fff;
+  padding:14px;
+  border-radius:30px;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+@media(max-width:992px){
+  .navbar{
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+  .brand{
+    width:100%;
+    justify-content:center;
+  }
+
+  .nav-links{
+    width:100%;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+
+  .nav-right{
+    width:100%;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+
+  .has-submenu .submenu{
+    left:0;
+    top:100%;
+    margin-left:0;
+    margin-top:2px;
+  }
+
+  .search-box input{
+    width:220px;
+  }
+
+  .cart-sidebar{
+    width:100%;
+    right:-100%;
+  }
+}
+</style>
+
+<header class="main-header">
+  <div class="navbar">
+
+    <a href="{% url 'home' %}" class="brand">
+      <div class="logo-wrapper">
+        <img src="{% static 'images/logo.png' %}" alt="Chatpata Junction">
+      </div>
+      <span class="brand-name">Chatpata Junction</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="{% url 'home' %}">Home</a></li>
+
+      <li class="dropdown">
+        <a href="{% url 'now' %}" id="shopBtn">Shop ▾</a>
+
+        <div class="dropdown-menu">
+          <a href="{% url 'adven' %}">🥭 Vegetables Pickle</a>
+          <a href="{% url 'humble' %}">🍋 Fruit Pickle</a>
+          <a href="{% url 'dare' %}">🌍 Regional Pickle</a>
+          <a href="{% url 'nontypes' %}">🌶 Non-Vegetarian Pickle</a>
+
+          <div class="has-submenu">
+            <a href="#">⭐ By Taste <i class="fa-solid fa-angle-right"></i></a>
+            <div class="submenu">
+              <a href="{% url 'care' %}">Spicy</a>
+              <a href="{% url 'topa' %}">Sweet</a>
+              <a href="{% url 'hero' %}">Sour</a>
+              <a href="{% url 'pagal' %}">Sweet & Sour</a>
+            </div>
+          </div>
+
+          <div class="has-submenu">
+            <a href="#">⭐ By Preservation <i class="fa-solid fa-angle-right"></i></a>
+            <div class="submenu">
+              <a href="{% url 'bby' %}">Oil Based</a>
+              <a href="{% url 'each' %}">Vinegar Based</a>
+              <a href="{% url 'pen' %}">Sun Dried</a>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li><a href="{% url 'scale' %}">Offers</a></li>
+      <li><a href="{% url 'book' %}">About</a></li>
+      <li><a href="{% url 'comb' %}">Contact</a></li>
+    </ul>
+
+    <div class="nav-right">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Search Pickles...">
+      </div>
+
+      <button type="button" class="btn cart-btn" id="cartBtn" onclick="openCart()">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span>Cart</span>
+        <span class="cart-badge" id="cartCount">
+          {% if request.session.cart %}
+            {{ request.session.cart|length }}
+          {% else %}
+            0
+          {% endif %}
+        </span>
+      </button>
+
+      {% if request.session.user_id %}
+        <a href="{% url 'logout' %}" class="btn">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </a>
+
+        <a href="{% url 'profile' %}" class="user-name">
+          <i class="fa-solid fa-user"></i>
+          <span>Hi, {{ request.session.user_name }}</span>
+        </a>
+      {% else %}
+        <a href="{% url 'bow' %}" class="btn">
+          <i class="fa-solid fa-user"></i> Login
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</header>
+
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h2>🛒 Your Cart</h2>
+    <span class="close-cart" onclick="closeCart()">×</span>
+  </div>
+
+  <div id="cartItems">
+    <p style="color:#7a3300;">Your cart is empty.</p>
+  </div>
+
+  <div class="cart-footer">
+    <h3>Total: ₹<span id="cartTotal">0</span></h3>
+    <button type="button" onclick="window.location.href='{% url 'kok' %}'">
+      Proceed to Checkout
+    </button>
+  </div>
+</div>
+
+<script>
+function openCart(){
+  var sidebar = document.getElementById("cartSidebar");
+  if(sidebar){
+    sidebar.classList.add("active");
+  }
+}
+
+function closeCart(){
+  var sidebar = document.getElementById("cartSidebar");
+  if(sidebar){
+    sidebar.classList.remove("active");
+  }
+}
+</script>

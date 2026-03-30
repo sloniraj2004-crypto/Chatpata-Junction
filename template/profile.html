@@ -1,0 +1,539 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile | Chatpata Junction</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Segoe UI',sans-serif;
+    }
+
+    body{
+      background:linear-gradient(135deg,#fff8f0,#fff1e8);
+      min-height:100vh;
+      color:#333;
+      padding:30px 15px;
+    }
+
+    .profile-container{
+      max-width:1100px;
+      margin:auto;
+    }
+
+    .topbar{
+      background:#fff;
+      border-radius:22px;
+      padding:22px 28px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      box-shadow:0 8px 24px rgba(0,0,0,0.08);
+      margin-bottom:25px;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .topbar h1{
+      color:#8B4513;
+      font-size:30px;
+      font-weight:800;
+    }
+
+    .welcome{
+      background:#fff3e4;
+      color:#8B4513;
+      padding:10px 18px;
+      border-radius:30px;
+      font-weight:700;
+    }
+
+    .profile-wrapper{
+      display:grid;
+      grid-template-columns:330px 1fr;
+      gap:25px;
+    }
+
+    .profile-card,
+    .edit-card{
+      background:#fff;
+      border-radius:24px;
+      box-shadow:0 10px 28px rgba(0,0,0,0.08);
+      overflow:hidden;
+    }
+
+    .profile-card{
+      padding:30px 24px;
+      text-align:center;
+    }
+
+    .profile-img-box{
+      position:relative;
+      width:170px;
+      height:170px;
+      margin:0 auto 18px;
+    }
+
+    .profile-img-box img{
+      width:170px;
+      height:170px;
+      border-radius:50%;
+      object-fit:cover;
+      border:6px solid #fff3e4;
+      box-shadow:0 10px 24px rgba(0,0,0,0.12);
+      display:block;
+    }
+
+    .default-avatar{
+      width:170px;
+      height:170px;
+      border-radius:50%;
+      background:linear-gradient(135deg,#FFD700,#FFA500);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-size:62px;
+      color:#8B4513;
+      border:6px solid #fff3e4;
+      box-shadow:0 10px 24px rgba(0,0,0,0.12);
+      margin:0 auto;
+    }
+
+    .camera-label{
+      position:absolute;
+      bottom:10px;
+      right:10px;
+      width:45px;
+      height:45px;
+      border-radius:50%;
+      background:#8B4513;
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      border:3px solid #fff;
+      transition:0.3s;
+    }
+
+    .camera-label:hover{
+      background:#D2691E;
+      transform:scale(1.08);
+    }
+
+    #profile_image{
+      display:none;
+    }
+
+    .profile-card h2{
+      color:#8B4513;
+      font-size:28px;
+      margin-bottom:6px;
+    }
+
+    .profile-card p{
+      color:#777;
+      font-size:14px;
+      margin-bottom:22px;
+    }
+
+    .info-box{
+      background:#fff7ef;
+      border-radius:16px;
+      padding:14px;
+      text-align:left;
+      margin-bottom:12px;
+    }
+
+    .info-box strong{
+      display:block;
+      color:#8B4513;
+      font-size:14px;
+      margin-bottom:5px;
+    }
+
+    .info-box span{
+      color:#444;
+      font-size:15px;
+      word-break:break-word;
+    }
+
+    .edit-card{
+      padding:30px;
+    }
+
+    .card-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-bottom:20px;
+    }
+
+    .section-title{
+      font-size:30px;
+      color:#8B4513;
+      font-weight:800;
+    }
+
+    .section-sub{
+      color:#777;
+      font-size:14px;
+      margin-top:5px;
+    }
+
+    .edit-toggle{
+      border:none;
+      background:#8B4513;
+      color:#fff;
+      padding:12px 18px;
+      border-radius:30px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .edit-toggle:hover{
+      background:#D2691E;
+    }
+
+    .success-msg{
+      background:#eafaf0;
+      color:#1c6b3a;
+      border:1px solid #9ed5b1;
+      padding:14px 16px;
+      border-radius:14px;
+      font-weight:700;
+      margin-bottom:18px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+    }
+
+    .form-group{
+      display:flex;
+      flex-direction:column;
+    }
+
+    .form-group.full{
+      grid-column:1 / -1;
+    }
+
+    .form-group label{
+      margin-bottom:8px;
+      color:#8B4513;
+      font-weight:700;
+      font-size:15px;
+    }
+
+    .form-group input,
+    .form-group textarea{
+      padding:14px 16px;
+      border:1px solid #e8d8c8;
+      border-radius:14px;
+      font-size:15px;
+      outline:none;
+      transition:0.3s;
+      background:#fffdfa;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus{
+      border-color:#D2691E;
+      box-shadow:0 0 0 4px rgba(210,105,30,0.12);
+    }
+
+    .form-group textarea{
+      resize:none;
+      min-height:120px;
+    }
+
+    .readonly{
+      opacity:0.75;
+      pointer-events:none;
+    }
+
+    .btn-row{
+      margin-top:24px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      border:none;
+      padding:14px 24px;
+      border-radius:30px;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.3s;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .btn-save{
+      background:linear-gradient(135deg,#FFD700,#FFA500);
+      color:#6d3900;
+    }
+
+    .btn-save:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 20px rgba(255,165,0,0.28);
+    }
+
+    .btn-reset{
+      background:#f3ece5;
+      color:#8B4513;
+    }
+
+    .btn-reset:hover{
+      background:#eadfd4;
+    }
+
+    @media(max-width:900px){
+      .profile-wrapper{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:768px){
+      .topbar h1,
+      .section-title{
+        font-size:24px;
+      }
+
+      .form-grid{
+        grid-template-columns:1fr;
+      }
+
+      .edit-card,
+      .profile-card{
+        padding:20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="profile-container">
+
+    <div class="topbar">
+      <h1>My Profile</h1>
+      <div class="welcome">Hi, {{ user.Name }}</div>
+    </div>
+
+    <div class="profile-wrapper">
+
+      <div class="profile-card">
+        <div class="profile-img-box">
+          {% if user.Profile_Image %}
+            <img id="preview" src="/media/{{ user.Profile_Image }}" alt="Profile Image">
+          {% else %}
+            <div class="default-avatar" id="preview-box">
+              <i class="fas fa-user"></i>
+            </div>
+            <img id="preview" src="" alt="Profile Image" style="display:none;">
+          {% endif %}
+
+          <label for="profile_image" class="camera-label" title="Change Photo">
+            <i class="fas fa-camera"></i>
+          </label>
+        </div>
+
+        <h2>Hi, {{ request.session.user_name|default:"Guest" }}</h2>
+        <p>Your personal account details</p>
+
+        <div class="info-box">
+          <strong>Customer ID</strong>
+          <span>{{ user.Customer_ID }}</span>
+        </div>
+
+        <div class="info-box">
+          <strong>Email</strong>
+          <span>{{ user.Email }}</span>
+        </div>
+
+        <div class="info-box">
+          <strong>Address</strong>
+          <span>{{ user.Address }}</span>
+        </div>
+
+        <div class="info-box">
+          <strong>Phone Number</strong>
+          <span>{{ user.Phone_Number }}</span>
+        </div>
+      </div>
+
+      <div class="edit-card">
+        <div class="card-header">
+          <div>
+            <div class="section-title">Profile Details</div>
+            <div class="section-sub">Click edit to update your information</div>
+          </div>
+
+          <button type="button" class="edit-toggle" id="editBtn" onclick="enableEdit()">
+            <i class="fas fa-pen"></i> Edit Profile
+          </button>
+        </div>
+
+        {% if updated %}
+          <div class="success-msg">
+            <i class="fas fa-check-circle"></i> Profile updated successfully.
+          </div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data" id="profileForm">
+          {% csrf_token %}
+
+          <input type="file" name="profile_image" id="profile_image" accept="image/*" onchange="previewImage(event)">
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" name="name" value="{{ user.Name }}" required readonly class="editable">
+            </div>
+
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" name="email" value="{{ user.Email }}" required readonly class="editable">
+            </div>
+
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="text" name="phone" value="{{ user.Phone_Number }}" required readonly class="editable">
+            </div>
+
+            <div class="form-group">
+              <label>Customer ID</label>
+              <input type="text" value="{{ user.Customer_ID }}" readonly class="readonly">
+            </div>
+
+            <div class="form-group full">
+              <label>Address</label>
+              <textarea name="address" required readonly class="editable">{{ user.Address }}</textarea>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button type="submit" class="btn btn-save" id="saveBtn" style="display:none;">
+              <i class="fas fa-save"></i> Save Changes
+            </button>
+
+            <button type="button" class="btn btn-reset" onclick="resetFormData()">
+              <i class="fas fa-rotate-left"></i> Reset
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    let originalData = {};
+
+    window.onload = function () {
+      originalData.name = document.querySelector('input[name="name"]').value;
+      originalData.email = document.querySelector('input[name="email"]').value;
+      originalData.phone = document.querySelector('input[name="phone"]').value;
+      originalData.address = document.querySelector('textarea[name="address"]').value;
+      originalData.image = "{% if user.Profile_Image %}/media/{{ user.Profile_Image }}{% else %}{% endif %}";
+
+      {% if login_success %}
+
+      Swal.fire({
+        title: 'Login Successful!',
+        text: 'Welcome to your profile.',
+        icon: 'success',
+        confirmButtonColor: '#8B4513'
+      });
+      
+      {% endif %}
+    };
+
+    function enableEdit() {
+      const fields = document.querySelectorAll('.editable');
+      fields.forEach(field => {
+        field.removeAttribute('readonly');
+      });
+
+      document.getElementById('saveBtn').style.display = 'inline-flex';
+      document.getElementById('editBtn').innerHTML = '<i class="fas fa-check"></i> Editing...';
+      document.getElementById('editBtn').disabled = true;
+      document.getElementById('editBtn').style.opacity = '0.7';
+      document.getElementById('editBtn').style.cursor = 'not-allowed';
+    }
+
+    function previewImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById('preview');
+          const previewBox = document.getElementById('preview-box');
+
+          if (previewBox) {
+            previewBox.style.display = 'none';
+          }
+
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function resetFormData() {
+      document.querySelector('input[name="name"]').value = originalData.name;
+      document.querySelector('input[name="email"]').value = originalData.email;
+      document.querySelector('input[name="phone"]').value = originalData.phone;
+      document.querySelector('textarea[name="address"]').value = originalData.address;
+
+      const preview = document.getElementById('preview');
+      const previewBox = document.getElementById('preview-box');
+      const fileInput = document.getElementById('profile_image');
+
+      fileInput.value = "";
+
+      if (originalData.image) {
+        preview.src = originalData.image;
+        preview.style.display = 'block';
+        if (previewBox) {
+          previewBox.style.display = 'none';
+        }
+      } else {
+        preview.src = "";
+        preview.style.display = 'none';
+        if (previewBox) {
+          previewBox.style.display = 'flex';
+        }
+      }
+
+      const fields = document.querySelectorAll('.editable');
+      fields.forEach(field => {
+        field.setAttribute('readonly', true);
+      });
+
+      document.getElementById('saveBtn').style.display = 'none';
+      document.getElementById('editBtn').innerHTML = '<i class="fas fa-pen"></i> Edit Profile';
+      document.getElementById('editBtn').disabled = false;
+      document.getElementById('editBtn').style.opacity = '1';
+      document.getElementById('editBtn').style.cursor = 'pointer';
+    }
+  </script>
+
+</body>
+</html>
