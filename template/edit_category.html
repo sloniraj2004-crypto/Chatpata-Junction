@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Category</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background:#fff8f0;
+            padding:20px;
+        }
+        .box{
+            max-width:700px;
+            margin:auto;
+            background:#fff;
+            padding:25px;
+            border-radius:14px;
+            box-shadow:0 4px 12px rgba(0,0,0,0.12);
+        }
+        h2{
+            text-align:center;
+            color:#8B4513;
+        }
+        input, textarea, select{
+            width:100%;
+            padding:12px;
+            margin-bottom:12px;
+            border:1px solid #ccc;
+            border-radius:10px;
+        }
+        button{
+            background:linear-gradient(135deg,#8B4513,#D2691E);
+            color:#fff;
+            border:none;
+            padding:12px 20px;
+            border-radius:10px;
+            font-weight:bold;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <h2>Edit Category</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="category_name" value="{{ category.Category_Name }}">
+        <input type="text" name="category_image" value="{{ category.Category_Image }}">
+        <textarea name="category_description">{{ category.Category_Description }}</textarea>
+        <select name="status">
+            <option value="Active" {% if category.Status == 'Active' %}selected{% endif %}>Active</option>
+            <option value="Inactive" {% if category.Status == 'Inactive' %}selected{% endif %}>Inactive</option>
+        </select>
+        <a href="{% url 'admin_category' %}"><button type="submit">Update Category</button></a>
+    </form>
+</div>
+</body>
+</html>

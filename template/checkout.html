@@ -1,0 +1,419 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout | Chatpata Junction</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Segoe UI',sans-serif;
+    }
+
+    body{
+      background:#fff8ef;
+      color:#5a2d0c;
+    }
+
+    .checkout-container{
+      max-width:1300px;
+      margin:40px auto;
+      padding:20px;
+    }
+
+    .checkout-form{
+      display:grid;
+      grid-template-columns:2fr 1fr;
+      gap:30px;
+      align-items:start;
+    }
+
+    .checkout-box,
+    .summary-box{
+      background:#fff;
+      border-radius:24px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.08);
+      padding:30px;
+    }
+
+    h2{
+      color:#8B4513;
+      margin-bottom:20px;
+      font-size:30px;
+    }
+
+    .section-title{
+      font-size:22px;
+      font-weight:700;
+      color:#a14f10;
+      margin-bottom:18px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+    }
+
+    .input-group{
+      display:flex;
+      flex-direction:column;
+    }
+
+    .input-group.full{
+      grid-column:1 / -1;
+    }
+
+    .input-group label{
+      margin-bottom:8px;
+      font-weight:600;
+      color:#7a3b00;
+    }
+
+    .input-group input,
+    .input-group textarea,
+    .input-group select{
+      padding:14px 16px;
+      border:2px solid #f0d7bb;
+      border-radius:14px;
+      outline:none;
+      font-size:15px;
+      background:#fffaf5;
+      width:100%;
+    }
+
+    .input-group textarea{
+      resize:none;
+      min-height:100px;
+    }
+
+    .payment-methods{
+      margin-top:25px;
+      display:grid;
+      gap:14px;
+    }
+
+    .payment-option{
+      border:2px solid #f0d7bb;
+      border-radius:16px;
+      padding:14px 16px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      background:#fffaf5;
+    }
+
+    .payment-option input{
+      transform:scale(1.2);
+      width:auto;
+    }
+
+    .summary-box h3{
+      font-size:24px;
+      color:#8B4513;
+      margin-bottom:20px;
+    }
+
+    .order-item{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:14px 0;
+      border-bottom:1px solid #f1e2d2;
+      font-size:15px;
+      gap:12px;
+    }
+
+    .price-details{
+      margin-top:20px;
+      padding-top:15px;
+      border-top:2px dashed #e7c9a7;
+    }
+
+    .price-row{
+      display:flex;
+      justify-content:space-between;
+      margin:12px 0;
+      font-size:16px;
+    }
+
+    .price-row.total{
+      font-size:22px;
+      font-weight:800;
+      color:#d2691e;
+      margin-top:18px;
+    }
+
+    .place-order-btn{
+      margin-top:25px;
+      width:100%;
+      padding:16px;
+      border:none;
+      border-radius:18px;
+      background:linear-gradient(135deg,#ffb347,#ff7b00);
+      color:#fff;
+      font-size:18px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .place-order-btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 18px rgba(0,0,0,0.15);
+    }
+
+    .secure-note{
+      margin-top:16px;
+      text-align:center;
+      color:#8b5a2b;
+      font-size:14px;
+    }
+
+    @media(max-width:900px){
+      .checkout-form{
+        grid-template-columns:1fr;
+      }
+
+      .form-grid{
+        grid-template-columns:1fr;
+      }
+
+      .input-group.full{
+        grid-column:auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="checkout-container">
+    <form method="post" class="checkout-form" onsubmit="return validateForm()">
+      {% csrf_token %}
+      <input type="hidden" name="amount" value="{{ total }}">
+
+      <!-- LEFT -->
+      <div class="checkout-box">
+        <h2>Checkout</h2>
+
+        <div class="section-title">Delivery Details</div>
+
+        <div class="form-grid">
+          <div class="input-group">
+  <label>Full Name</label>
+  <input type="text" name="full_name"
+         placeholder="Enter your full name"
+         pattern="[A-Za-z ]+"
+         oninput="this.value = this.value.replace(/[^A-Za-z ]/g, '')"
+         title="Only alphabets allowed"
+         required>
+</div>
+
+          <div class="input-group">
+  <label>Phone Number</label>
+  <input type="tel" name="phone"
+         placeholder="Enter your phone number"
+         pattern="[0-9]{10}"
+         maxlength="10"
+         oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+         title="Enter 10 digit phone number"
+         required>
+</div>
+
+          <div class="input-group">
+            <label>Email Address</label>
+            <input type="email" name="email" placeholder="Enter your email" required>
+          </div>
+
+          <div class="input-group">
+  <label>Pincode</label>
+  <input type="text" name="pincode"
+         placeholder="Enter pincode"
+         pattern="[0-9]{6}"
+         maxlength="6"
+         oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+         title="Enter valid 6 digit pincode"
+         required>
+</div>
+
+          <div class="input-group full">
+            <label>Full Address</label>
+            <textarea name="address" placeholder="Enter your full delivery address" required></textarea>
+          </div>
+
+          <div class="input-group">
+            <label>City</label>
+            <input type="text" name="city" placeholder="Enter city" required>
+          </div>
+
+          <div class="input-group">
+            <label>State</label>
+            <input type="text" name="state" placeholder="Enter state" required>
+          </div>
+        </div>
+
+        <div class="section-title" style="margin-top:30px;">Payment Method</div>
+
+        <div class="payment-methods">
+          <label class="payment-option">
+            <input type="radio" name="payment_method" value="COD" checked>
+            <span>Cash on Delivery</span>
+          </label>
+
+          <label class="payment-option">
+            <input type="radio" name="payment_method" value="UPI">
+            <span>UPI Payment</span>
+          </label>
+
+          <label class="payment-option">
+            <input type="radio" name="payment_method" value="Card">
+            <span>Debit / Credit Card</span>
+          </label>
+
+          <label class="payment-option">
+            <input type="radio" name="payment_method" value="NetBanking">
+            <span>Net Banking</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="summary-box">
+        <h3>Order Summary</h3>
+
+        {% if cart_items %}
+          {% for item in cart_items %}
+          <div class="order-item">
+            <span>{{ item.name }} x {{ item.qty }}</span>
+            <span>₹{{ item.price|floatformat:0 }} × {{ item.qty }}</span>
+          </div>
+          {% endfor %}
+
+          <div class="price-details">
+            <div class="price-row">
+              <span>Subtotal</span>
+              <span>₹{{ subtotal }}</span>
+            </div>
+
+            <div class="price-row">
+              <span>Delivery Charge</span>
+              <span>₹{{ delivery_charge }}</span>
+            </div>
+
+            <div class="price-row">
+              <span>Discount</span>
+              <span>- ₹{{ discount }}</span>
+            </div>
+
+            <div class="price-row total">
+              <span>Total</span>
+              <span>₹{{ total }}</span>
+            </div>
+          </div>
+
+     
+   <button class="place-order-btn" type="submit">Place Order</button>
+
+        {% else %}
+          <div class="order-item">
+            <span>Your cart is empty</span>
+            <span>₹0</span>
+          </div>
+        {% endif %}
+
+        <div class="secure-note">
+          100% Secure Checkout • Fresh Homemade Pickles
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const orderSummary = document.getElementById("order-summary");
+    const subtotalBox = document.getElementById("subtotal");
+    const deliveryChargeBox = document.getElementById("delivery-charge");
+    const discountBox = document.getElementById("discount");
+    const totalBox = document.getElementById("order-total");
+
+    if (!orderSummary || !subtotalBox || !deliveryChargeBox || !discountBox || !totalBox) {
+        return;
+    }
+
+    if (cart.length === 0) {
+        orderSummary.innerHTML = `
+          <div class="order-item">
+            <span>Your cart is empty</span>
+            <span>₹0</span>
+          </div>
+        `;
+        subtotalBox.innerText = "₹0";
+        deliveryChargeBox.innerText = "₹0";
+        discountBox.innerText = "- ₹0";
+        totalBox.innerText = "₹0";
+        return;
+    }
+
+    let subtotal = 0;
+    let html = "";
+
+    cart.forEach(item => {
+        let itemTotal = item.price * item.qty;
+        subtotal += itemTotal;
+
+        html += `
+            <div class="order-item">
+                <span>${item.name} x ${item.qty}</span>
+                <span>₹${itemTotal}</span>
+            </div>
+        `;
+    });
+
+    let deliveryCharge = subtotal > 0 ? 40 : 0;
+    let discount = 0;
+    let total = subtotal + deliveryCharge - discount;
+
+    orderSummary.innerHTML = html;
+    subtotalBox.innerText = `₹${subtotal}`;
+    deliveryChargeBox.innerText = `₹${deliveryCharge}`;
+    discountBox.innerText = `- ₹${discount}`;
+    totalBox.innerText = `₹${total}`;
+});
+
+function showOrderPopup() {
+    alert("Order placed successfully!");
+   
+    return true;
+}
+
+function validateForm() {
+    let name = document.querySelector("[name='full_name']").value;
+    let phone = document.querySelector("[name='phone']").value;
+    let pincode = document.querySelector("[name='pincode']").value;
+
+    if (!/^[A-Za-z ]+$/.test(name)) {
+        alert("Name should contain only alphabets!");
+        return false;
+    }
+
+    if (!/^[0-9]{10}$/.test(phone)) {
+        alert("Phone number must be 10 digits!");
+        return false;
+    }
+
+    if (!/^[0-9]{6}$/.test(pincode)) {
+        alert("Pincode must be 6 digits!");
+        return false;
+    }
+
+    return true;
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,654 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vegetable Pickles | Chatpata Junction</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Segoe UI',sans-serif;
+    }
+
+    body{
+      background:#fff6eb;
+    }
+
+    /* ===== PRODUCTS ===== */
+    .products{
+      max-width:1300px;
+      margin:auto;
+      padding:20px;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:25px;
+    }
+
+    .product-card{
+      background:#fff8dc;
+      border-radius:25px;
+      overflow:hidden;
+      box-shadow:0 12px 30px rgba(0,0,0,0.3);
+      transition:0.3s;
+    }
+
+    .product-card:hover{
+      transform:translateY(-6px);
+    }
+
+    .product-img img{
+      width:100%;
+      height:400px;
+      object-fit:cover;
+      display:block;
+    }
+
+    .product-info{
+      padding:20px;
+      background:#fff6d5;
+    }
+
+    .tag{
+      display:inline-block;
+      background:crimson;
+      color:white;
+      padding:6px 14px;
+      border-radius:20px;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .product-info h3{
+      margin:12px 0 6px;
+      color:#8b4513;
+      font-size:22px;
+    }
+
+    .product-info p{
+      margin:4px 0;
+      font-size:15px;
+      color:#333;
+    }
+
+    .weight{
+      font-size:14px;
+    }
+
+    .price{
+      font-size:30px;
+      color:crimson;
+      font-weight:800;
+      margin:10px 0;
+    }
+
+    .btn-group{
+      display:flex;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .btn-group button{
+      flex:1;
+      padding:12px;
+      border:none;
+      border-radius:18px;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+      color:#fff;
+      transition:0.3s;
+    }
+
+    .add-cart{
+      background:linear-gradient(135deg,#32cd32,#1e8f1e);
+    }
+
+    .buy-now{
+      background:linear-gradient(135deg,#ff4500,#ff0000);
+    }
+
+    .btn-group button:hover{
+      opacity:0.9;
+      transform:translateY(-2px);
+    }
+
+    /* ===== CART SIDEBAR ===== */
+    .cart-sidebar{
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 380px;
+      height: 100%;
+      background: #fff6d5;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.3);
+      transition: 0.4s;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-sidebar.active{
+      right: 0;
+    }
+
+    .cart-header{
+      padding: 20px;
+      background: #8b4513;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .close-cart{
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .cart-items{
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+    }
+
+    .cart-item{
+      background: #fff;
+      border-radius: 15px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .cart-item h4{
+      margin-bottom: 5px;
+      color:#8b4513;
+    }
+
+    .qty-btn{
+      padding: 4px 10px;
+      border: none;
+      background: #ffd700;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+      margin-right:5px;
+      margin-top:8px;
+    }
+
+    .remove-btn{
+      background: crimson;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      float: right;
+      margin-top:8px;
+    }
+
+    .cart-footer{
+      padding: 15px;
+      border-top: 2px solid #ddd;
+    }
+
+    .checkout-btn{
+      width:100%;
+      margin-top:12px;
+      border:none;
+      padding:13px;
+      border-radius:30px;
+      background:linear-gradient(135deg,#ff4500,#ff0000);
+      color:#fff;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .checkout-btn:hover{
+      opacity:0.9;
+      transform:translateY(-2px);
+    }
+
+    @media(max-width:768px){
+      .cart-sidebar{
+        width:100%;
+      }
+
+      .btn-group{
+        flex-direction:column;
+      }
+
+      .product-img img{
+        height:300px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  {% include 'header.html' %}
+
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h2>🛒 Your Cart</h2>
+      <span class="close-cart" onclick="closeCart()">✖</span>
+    </div>
+
+    <div class="cart-items" id="cartItems"></div>
+
+    <div class="cart-footer">
+      <h3>Total: ₹<span id="cartTotal">0</span></h3>
+      <a href="{% url 'kok' %}">
+        <button class="checkout-btn" type="button">Proceed to Checkout</button>
+      </a>
+    </div>
+  </div>
+
+  <div class="products">
+    <div class="product-card mango">
+      <div class="product-img">
+        <img src="{% static 'images/Vegetables-pickles/mango pickle.png' %}" alt="Mango Pickle">
+      </div>
+      <div class="product-info">
+        <span class="tag">Mango</span>
+        <p>Traditional raw mango pickle</p>
+        <p class="weight">Weight: 400g</p>
+        <div class="price">₹199</div>
+        <div class="btn-group">
+          <button class="add-cart" onclick="addToCart('Mango Pickle',199)" type="button">🛒 Add to Cart</button>
+          <button class="buy-now" onclick="buyNow('Mango Pickle',199)" type="button">⚡ Buy Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card lemon">
+      <div class="product-img">
+        <img src="{% static 'images/Vegetables-pickles/lemon pickle.png' %}" alt="Lemon Pickle">
+      </div>
+      <div class="product-info">
+        <span class="tag">Lemon</span>
+        <p>Traditional lemon pickle</p>
+        <p class="weight">Weight: 500g</p>
+        <div class="price">₹299</div>
+        <div class="btn-group">
+          <button class="add-cart" onclick="addToCart('Lemon Pickle',299)" type="button">🛒 Add to Cart</button>
+          <button class="buy-now" onclick="buyNow('Lemon Pickle',299)" type="button">⚡ Buy Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card carrot">
+      <div class="product-img">
+        <img src="{% static 'images/Vegetables-pickles/carrot pickle.png' %}" alt="Carrot Pickle">
+      </div>
+      <div class="product-info">
+        <span class="tag">Carrot</span>
+        <p>Traditional carrot pickle</p>
+        <p class="weight">Weight: 400g</p>
+        <div class="price">₹199</div>
+        <div class="btn-group">
+          <button class="add-cart" onclick="addToCart('Carrot Pickle',199)" type="button">🛒 Add to Cart</button>
+          <button class="buy-now" onclick="buyNow('Carrot Pickle',199)" type="button">⚡ Buy Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card mixed">
+      <div class="product-img">
+        <img src="{% static 'images/Vegetables-pickles/mixed-vegetables  pickle.png'%}" alt="Mixed Vegetable Pickle">
+      </div>
+      <div class="product-info">
+        <span class="tag">Mixed Vegetable</span>
+        <p>Traditional mixed vegetable pickle</p>
+        <p class="weight">Weight: 500g</p>
+        <div class="price">₹229</div>
+        <div class="btn-group">
+          <button class="add-cart" onclick="addToCart('Mixed Vegetable Pickle',229)" type="button">🛒 Add to Cart</button>
+          <button class="buy-now" onclick="buyNow('Mixed Vegetable Pickle',229)" type="button">⚡ Buy Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card turnip">
+      <div class="product-img">
+        <img src="{% static 'images/Vegetables-pickles/turnip pickle.png' %}" alt="Turnip Pickle">
+      </div>
+      <div class="product-info">
+        <span class="tag">Turnip</span>
+        <p>Traditional turnip pickle</p>
+        <p class="weight">Weight: 500g</p>
+        <div class="price">₹229</div>
+        <div class="btn-group">
+          <button class="add-cart" onclick="addToCart('Turnip Pickle',229)" type="button">🛒 Add to Cart</button>
+          <button class="buy-now" onclick="buyNow('Turnip Pickle',229)" type="button">⚡ Buy Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card cabbage">
+      <div class="product-img">
+        <img src="{% static 'images/Vegetables-pickles/cabbage pickle.png' %}" alt="Cabbage Pickle">
+      </div>
+      <div class="product-info">
+        <span class="tag">Cabbage</span>
+        <p>Traditional cabbage pickle</p>
+        <p class="weight">Weight: 400g</p>
+        <div class="price">₹199</div>
+        <div class="btn-group">
+          <button class="add-cart" onclick="addToCart('Cabbage Pickle',199)" type="button">🛒 Add to Cart</button>
+          <button class="buy-now" onclick="buyNow('Cabbage Pickle',199)" type="button">⚡ Buy Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card garlic">
+      <div class="product-img">
+        <img src="{% static 'images/Vegetables-pickles/garlic pickle.png' %}" alt="Garlic Pickle">
+      </div>
+      <div class="product-info">
+        <span class="tag">Garlic</span>
+        <p>Traditional garlic pickle</p>
+        <p class="weight">Weight: 500g</p>
+        <div class="price">₹229</div>
+        <div class="btn-group">
+          <button class="add-cart" onclick="addToCart('Garlic Pickle',229)" type="button">🛒 Add to Cart</button>
+          <button class="buy-now" onclick="buyNow('Garlic Pickle',229)" type="button">⚡ Buy Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card ginger">
+      <div class="product-img">
+        <img src="{% static 'images/Vegetables-pickles/ginger pickle.png' %}" alt="Ginger Pickle">
+      </div>
+      <div class="product-info">
+        <span class="tag">Ginger</span>
+        <p>Traditional ginger pickle</p>
+        <p class="weight">Weight: 500g</p>
+        <div class="price">₹229</div>
+        <div class="btn-group">
+          <button class="add-cart" onclick="addToCart('Ginger Pickle',229)" type="button">🛒 Add to Cart</button>
+          <button class="buy-now" onclick="buyNow('Ginger Pickle',229)" type="button">⚡ Buy Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card onion">
+      <div class="product-img">
+        <img src="{% static 'images/Vegetables-pickles/onion pickle.png' %}" alt="Onion Pickle">
+      </div>
+      <div class="product-info">
+        <span class="tag">Onion</span>
+        <p>Traditional onion pickle</p>
+        <p class="weight">Weight: 500g</p>
+        <div class="price">₹229</div>
+        <div class="btn-group">
+          <button class="add-cart" onclick="addToCart('Onion Pickle',229)" type="button">🛒 Add to Cart</button>
+          <button class="buy-now" onclick="buyNow('Onion Pickle',229)" type="button">⚡ Buy Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card kerda">
+      <div class="product-img">
+        <img src="{% static 'images/Vegetables-pickles/kedra-sangri pickle.png' %}" alt="Kerda Sangri Pickle">
+      </div>
+      <div class="product-info">
+        <span class="tag">Kerda Sangri</span>
+        <p>Traditional kerda sangri pickle</p>
+        <p class="weight">Weight: 500g</p>
+        <div class="price">₹229</div>
+        <div class="btn-group">
+          <button class="add-cart" onclick="addToCart('Kerda Sangri Pickle',229)" type="button">🛒 Add to Cart</button>
+          <button class="buy-now" onclick="buyNow('Kerda Sangri Pickle',229)" type="button">⚡ Buy Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'footer.html' %}
+
+ <script>
+  const shopBtn = document.getElementById("shopBtn");
+  const shopMenu = document.getElementById("shopMenu");
+  const cartBtn = document.getElementById("cartBtn");
+  const cartSidebar = document.getElementById("cartSidebar");
+  const cartItems = document.getElementById("cartItems");
+  const cartCount = document.getElementById("cartCount");
+  const cartTotal = document.getElementById("cartTotal");
+  const searchInput = document.getElementById("searchInput");
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  function searchProducts() {
+    if (!searchInput) return;
+    const input = searchInput.value.toLowerCase();
+    const cards = document.querySelectorAll(".product-card");
+
+    cards.forEach(card => {
+      const text = card.innerText.toLowerCase();
+      card.style.display = text.includes(input) ? "" : "none";
+    });
+  }
+
+  if (cartBtn && cartSidebar) {
+    cartBtn.addEventListener("click", function () {
+      cartSidebar.classList.add("active");
+      loadCart();
+    });
+  }
+
+  function openCart() {
+    if (cartSidebar) {
+      cartSidebar.classList.add("active");
+      loadCart();
+    }
+  }
+
+  function closeCart() {
+    if (cartSidebar) {
+      cartSidebar.classList.remove("active");
+    }
+  }
+
+  function addToCart(name, price) {
+    fetch("{% url 'add_to_cart' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({
+        name: name,
+        price: price
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Add to cart request failed");
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("addToCart response:", data);
+      renderCart(data.cart || [], data.count || 0, data.total || 0);
+      openCart();
+    })
+    .catch(error => {
+      console.error("Add to cart error:", error);
+      alert("Product add nahi ho raha. Console check karo.");
+    });
+  }
+
+  function buyNow(name, price) {
+    fetch("{% url 'add_to_cart' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({
+        name: name,
+        price: price
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Buy now request failed");
+      }
+      return response.json();
+    })
+    .then(() => {
+      window.location.href = "{% url 'kok' %}";
+    })
+    .catch(error => {
+      console.error("Buy now error:", error);
+      alert("Buy now kaam nahi kar raha.");
+    });
+  }
+
+  function loadCart() {
+    fetch("{% url 'get_cart_data' %}")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Load cart request failed");
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("loadCart response:", data);
+        renderCart(data.cart || [], data.count || 0, data.total || 0);
+      })
+      .catch(error => {
+        console.error("Load cart error:", error);
+      });
+  }
+
+  function renderCart(cart, count, total) {
+    if (!cartItems || !cartTotal) return;
+
+    cartItems.innerHTML = "";
+
+    if (cart.length === 0) {
+      cartItems.innerHTML = "<p>Your cart is empty.</p>";
+    } else {
+      cart.forEach((item, index) => {
+        cartItems.innerHTML += `
+          <div class="cart-item">
+            <h4>${item.name}</h4>
+            ₹${item.price} × ${item.qty}<br><br>
+            <button class="qty-btn" onclick="changeQty(${index},1)">+</button>
+            <button class="qty-btn" onclick="changeQty(${index},-1)">−</button>
+            <button class="remove-btn" onclick="removeItem(${index})">Delete</button>
+          </div>
+        `;
+      });
+    }
+
+    cartTotal.innerText = total;
+
+    if (cartCount) {
+      cartCount.innerText = count;
+    }
+  }
+
+  function changeQty(index, change) {
+    fetch("{% url 'change_cart_qty' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({
+        index: index,
+        change: change
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Change qty request failed");
+      }
+      return response.json();
+    })
+    .then(data => {
+      renderCart(data.cart || [], data.count || 0, data.total || 0);
+    })
+    .catch(error => {
+      console.error("Change qty error:", error);
+    });
+  }
+
+  function removeItem(index) {
+    fetch("{% url 'remove_cart_item' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({
+        index: index
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Remove item request failed");
+      }
+      return response.json();
+    })
+    .then(data => {
+      renderCart(data.cart || [], data.count || 0, data.total || 0);
+    })
+    .catch(error => {
+      console.error("Remove item error:", error);
+    });
+  }
+
+  if (shopBtn && shopMenu) {
+    shopBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      shopMenu.classList.toggle("show");
+    });
+  }
+
+  function toggleSub(event, id) {
+    event.stopPropagation();
+    const submenu = document.getElementById(id);
+    if (submenu) {
+      submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+    }
+  }
+
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".dropdown")) {
+      if (shopMenu) {
+        shopMenu.classList.remove("show");
+      }
+
+      document.querySelectorAll(".submenu-content").forEach(function (menu) {
+        menu.style.display = "none";
+      });
+    }
+  });
+
+  loadCart();
+</script>
+</body>
+</html>

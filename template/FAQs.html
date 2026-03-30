@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQs | Chatpata Junction</title>
+
+<style>
+/* ===== FAQ SECTION ===== */
+.faq-container{
+  max-width:900px;
+  margin:60px auto;
+  background:#fff8dc;
+  padding:40px;
+  border-radius:25px;
+  box-shadow:0 15px 30px rgba(0,0,0,0.15);
+}
+
+.faq-container h1{
+  text-align:center;
+  margin-bottom:30px;
+  color:#8b4513;
+}
+
+.faq{
+  border-bottom:1px solid #e0c097;
+  padding:18px 0;
+}
+
+.faq-question{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  cursor:pointer;
+  font-size:18px;
+  font-weight:600;
+  color:#5a2d0c;
+  gap:20px;
+}
+
+.faq-icon{
+  font-size:20px;
+  transition:transform 0.3s ease;
+}
+
+.faq-answer{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height 0.4s ease, margin-top 0.3s ease;
+  color:#333;
+  font-size:15px;
+  line-height:1.6;
+  margin-top:0;
+}
+
+.faq.active .faq-answer{
+  max-height:200px;
+  margin-top:10px;
+}
+
+.faq.active .faq-icon{
+  transform:rotate(180deg);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:768px){
+  .faq-container{
+    margin:30px 15px;
+    padding:25px 20px;
+  }
+
+  .faq-question{
+    font-size:16px;
+  }
+}
+</style>
+</head>
+<body>
+
+{% include 'header.html' %}
+
+<!-- ===== FAQ CONTENT ===== -->
+<div class="faq-container">
+  <h1>Frequently Asked Questions</h1>
+
+  <div class="faq">
+    <div class="faq-question">
+      <span>What is Chatpata Junction?</span>
+      <span class="faq-icon">▾</span>
+    </div>
+    <div class="faq-answer">
+      Chatpata Junction is an online store offering authentic, homemade Indian pickles made with traditional recipes.
+    </div>
+  </div>
+
+  <div class="faq">
+    <div class="faq-question">
+      <span>Are your pickles homemade?</span>
+      <span class="faq-icon">▾</span>
+    </div>
+    <div class="faq-answer">
+      Yes, all our pickles are homemade using fresh ingredients and no harmful preservatives.
+    </div>
+  </div>
+
+  <div class="faq">
+    <div class="faq-question">
+      <span>Do you deliver all over India?</span>
+      <span class="faq-icon">▾</span>
+    </div>
+    <div class="faq-answer">
+      Yes, we provide delivery across India with safe and hygienic packaging.
+    </div>
+  </div>
+
+  <div class="faq">
+    <div class="faq-question">
+      <span>How long do pickles last?</span>
+      <span class="faq-icon">▾</span>
+    </div>
+    <div class="faq-answer">
+      Shelf life varies from 6 months to 1 year depending on the type of pickle and storage conditions.
+    </div>
+  </div>
+
+  <div class="faq">
+    <div class="faq-question">
+      <span>What payment methods are accepted?</span>
+      <span class="faq-icon">▾</span>
+    </div>
+    <div class="faq-answer">
+      We accept UPI, Debit Cards, Credit Cards, Net Banking, and Cash on Delivery.
+    </div>
+  </div>
+</div>
+
+{% include 'footer.html' %}
+
+<script>
+const faqs = document.querySelectorAll(".faq");
+
+faqs.forEach(faq => {
+  faq.querySelector(".faq-question").addEventListener("click", () => {
+    faq.classList.toggle("active");
+  });
+});
+
+  const shopBtn = document.getElementById("shopBtn");
+  const shopMenu = document.getElementById("shopMenu");
+  const cartBtn = document.getElementById("cartBtn");
+  const cartSidebar = document.getElementById("cartSidebar");
+
+  // Shop dropdown toggle
+  shopBtn.addEventListener("click", function(e) {
+    e.preventDefault();
+    shopMenu.classList.toggle("show");
+  });
+
+  // Submenu toggle
+  function toggleSub(event, id) {
+    event.stopPropagation();
+    const submenu = document.getElementById(id);
+
+    if (submenu.style.display === "block") {
+      submenu.style.display = "none";
+    } else {
+      submenu.style.display = "block";
+    }
+  }
+
+  // Click outside dropdown -> close
+  document.addEventListener("click", function(e) {
+    if (!e.target.closest(".dropdown")) {
+      shopMenu.classList.remove("show");
+
+      document.querySelectorAll(".submenu-content").forEach(function(menu) {
+        menu.style.display = "none";
+      });
+    }
+  });
+
+  // Cart open
+  cartBtn.addEventListener("click", function() {
+    cartSidebar.classList.add("active");
+  });
+
+  // Cart close
+  function closeCart() {
+    cartSidebar.classList.remove("active");
+  }
+
+  // Dummy search function
+  function searchProducts() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    console.log("Searching for:", input);
+  }
+
+</script>
+
+</body>
+</html>

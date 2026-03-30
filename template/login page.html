@@ -1,0 +1,400 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Login | Chatpata Junction</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#ffb36b,#ff6a00);
+  padding:20px;
+}
+
+.login-wrapper{
+  width:100%;
+  max-width:1000px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  background:#fff;
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 18px 45px rgba(0,0,0,0.18);
+}
+
+.left-panel{
+  background:linear-gradient(135deg,#8B4513,#D2691E);
+  color:#fff;
+  padding:50px 40px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-start;
+}
+
+.brand{
+  font-size:38px;
+  font-weight:800;
+  color:#FFD700;
+  margin-bottom:14px;
+  line-height:1.2;
+}
+
+.left-panel p{
+  font-size:16px;
+  line-height:1.7;
+  max-width:420px;
+  color:#fff7ef;
+  margin-bottom:28px;
+}
+
+.feature-list{
+  list-style:none;
+  width:100%;
+}
+
+.feature-list li{
+  margin-bottom:14px;
+  font-size:15px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.feature-list i{
+  color:#FFD700;
+  font-size:16px;
+}
+
+.right-panel{
+  padding:42px 34px;
+  background:#fffaf5;
+}
+
+.login-top{
+  text-align:center;
+  margin-bottom:24px;
+}
+
+.login-icon{
+  width:78px;
+  height:78px;
+  background:linear-gradient(135deg,#ff9a56,#ff6a00);
+  color:#fff;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  margin:0 auto 14px;
+  box-shadow:0 10px 22px rgba(255,106,0,0.25);
+}
+
+.login-top h2{
+  color:#a14f08;
+  font-size:32px;
+  margin-bottom:8px;
+  font-weight:800;
+}
+
+.login-top p{
+  color:#6f6f6f;
+  font-size:14px;
+}
+
+.message-box{
+  margin-bottom:14px;
+}
+
+.message{
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:13px;
+  margin-bottom:8px;
+  font-weight:500;
+}
+
+.message.success{
+  background:#d4edda;
+  color:#155724;
+  border:1px solid #b8dfc0;
+}
+
+.message.error{
+  background:#f8d7da;
+  color:#721c24;
+  border:1px solid #efb8bf;
+}
+
+.form-group{
+  margin-bottom:18px;
+}
+
+.form-group label{
+  display:block;
+  margin-bottom:7px;
+  font-weight:700;
+  color:#7a3f0b;
+  font-size:15px;
+}
+
+.input-box{
+  position:relative;
+}
+
+.input-box i.input-icon{
+  position:absolute;
+  left:14px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#b45f18;
+  font-size:15px;
+}
+
+.input-box input{
+  width:100%;
+  height:50px;
+  border:1.5px solid #e3c7ab;
+  border-radius:14px;
+  padding:0 44px 0 42px;
+  font-size:14px;
+  background:#fff;
+  outline:none;
+  transition:0.25s ease;
+}
+
+.input-box input:focus{
+  border-color:#ff6a00;
+  box-shadow:0 0 0 4px rgba(255,106,0,0.12);
+}
+
+.toggle-password{
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  color:#a45d23;
+  font-size:15px;
+}
+
+.extra-options{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.remember-me{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:14px;
+  color:#555;
+}
+
+.remember-me input{
+  accent-color:#ff6a00;
+}
+
+.forgot-link{
+  font-size:14px;
+  text-decoration:none;
+  color:#d35400;
+  font-weight:700;
+}
+
+.forgot-link:hover{
+  text-decoration:underline;
+}
+
+.login-btn{
+  width:100%;
+  border:none;
+  outline:none;
+  background:linear-gradient(135deg,#ff8a2f,#ff6a00);
+  color:#fff;
+  padding:14px;
+  border-radius:30px;
+  font-size:17px;
+  font-weight:800;
+  cursor:pointer;
+  transition:0.25s ease;
+  box-shadow:0 10px 20px rgba(255,106,0,0.22);
+}
+
+.login-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 26px rgba(255,106,0,0.28);
+}
+
+.bottom-link{
+  margin-top:18px;
+  text-align:center;
+  font-size:14px;
+  color:#555;
+}
+
+.bottom-link a{
+  text-decoration:none;
+  color:#d35400;
+  font-weight:800;
+}
+
+.bottom-link a:hover{
+  text-decoration:underline;
+}
+
+.home-link{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:18px;
+  color:#8B4513;
+  text-decoration:none;
+  font-weight:700;
+  font-size:14px;
+}
+
+.home-link:hover{
+  color:#d35400;
+}
+
+@media (max-width: 900px){
+  .login-wrapper{
+    grid-template-columns:1fr;
+  }
+
+  .left-panel{
+    display:none;
+  }
+
+  .right-panel{
+    padding:32px 22px;
+  }
+
+  .login-top h2{
+    font-size:28px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="login-wrapper">
+
+  <div class="left-panel">
+    <div class="brand">Chatpata Junction</div>
+    <p>
+      Welcome back! Login to your account to explore your favourite pickles,
+      manage your profile, track orders, and enjoy a smooth shopping experience.
+    </p>
+
+    <ul class="feature-list">
+      <li><i class="fa-solid fa-circle-check"></i> Secure customer login</li>
+      <li><i class="fa-solid fa-circle-check"></i> Easy profile management</li>
+      <li><i class="fa-solid fa-circle-check"></i> Fast order tracking</li>
+      <li><i class="fa-solid fa-circle-check"></i> Simple checkout experience</li>
+    </ul>
+  </div>
+
+  <div class="right-panel">
+    <div class="login-top">
+      <div class="login-icon">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <h2>User Login</h2>
+      <p>Please enter your account details to continue</p>
+    </div>
+
+    {% if messages %}
+    <div class="message-box">
+      {% for message in messages %}
+      <div class="message {{ message.tags }}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <div class="input-box">
+          <i class="fa-solid fa-envelope input-icon"></i>
+          <input type="email" name="email" placeholder="Enter your email" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-box">
+          <i class="fa-solid fa-lock input-icon"></i>
+          <input type="password" name="password" id="password" placeholder="Enter your password" required>
+          <i class="fa-solid fa-eye toggle-password" onclick="togglePassword()" id="toggleIcon"></i>
+        </div>
+      </div>
+
+      <div class="extra-options">
+        <label class="remember-me">
+          <input type="checkbox" name="remember_me">
+          Remember me
+        </label>
+
+        <a href="#" class="forgot-link">Forgot Password?</a>
+      </div>
+
+      <button type="submit" class="login-btn">
+        <i class="fa-solid fa-right-to-bracket"></i> Login
+      </button>
+    </form>
+
+    <div class="bottom-link">
+      Don’t have an account?
+      <a href="{% url 'register' %}">Create Account</a>
+    </div>
+
+    <a href="{% url 'home' %}" class="home-link">
+      <i class="fa-solid fa-house"></i> Back to Home
+    </a>
+  </div>
+
+</div>
+
+<script>
+function togglePassword() {
+  const passwordInput = document.getElementById("password");
+  const toggleIcon = document.getElementById("toggleIcon");
+
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    toggleIcon.classList.remove("fa-eye");
+    toggleIcon.classList.add("fa-eye-slash");
+  } else {
+    passwordInput.type = "password";
+    toggleIcon.classList.remove("fa-eye-slash");
+    toggleIcon.classList.add("fa-eye");
+  }
+}
+</script>
+
+</body>
+</html>

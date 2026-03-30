@@ -1,0 +1,333 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard | Chatpata Junction</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Segoe UI',sans-serif;
+    }
+
+    body{
+      background:#fff8f0;
+      color:#333;
+    }
+
+    .main{
+      display:flex;
+      min-height:100vh;
+    }
+
+    .content{
+      margin-left:250px;
+      width:calc(100% - 250px);
+      padding:30px;
+    }
+
+    .topbar{
+      background:white;
+      border-radius:20px;
+      padding:22px 28px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      box-shadow:0 8px 20px rgba(0,0,0,0.08);
+      margin-bottom:24px;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .topbar h1{
+      color:#8B4513;
+      font-size:30px;
+      font-weight:800;
+    }
+
+    .welcome-chip{
+      background:#f8ead8;
+      color:#8B4513;
+      padding:12px 18px;
+      border-radius:18px;
+      font-size:20px;
+      font-weight:700;
+    }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:24px;
+      margin-bottom:24px;
+    }
+
+    .stat-card{
+      background:white;
+      border-radius:24px;
+      padding:28px 24px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.08);
+      border-left:8px solid #d96d17;
+      min-height:150px;
+    }
+
+    .stat-title{
+      font-size:18px;
+      color:#8B4513;
+      font-weight:800;
+      margin-bottom:18px;
+    }
+
+    .stat-value{
+      font-size:42px;
+      color:#d96d17;
+      font-weight:900;
+    }
+
+    .section-box{
+      background:white;
+      border-radius:24px;
+      padding:28px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.08);
+      margin-bottom:24px;
+    }
+
+    .section-box h2{
+      color:#8B4513;
+      font-size:28px;
+      font-weight:800;
+      margin-bottom:24px;
+    }
+
+    .profile-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:22px;
+    }
+
+    .profile-field{
+      background:#f8ead8;
+      border-radius:18px;
+      padding:18px 20px;
+      min-height:84px;
+    }
+
+    .profile-label{
+      color:#8B4513;
+      font-size:14px;
+      font-weight:800;
+      margin-bottom:8px;
+      text-transform:uppercase;
+      letter-spacing:.3px;
+    }
+
+    .profile-value{
+      color:#4a2c16;
+      font-size:20px;
+      font-weight:700;
+      word-break:break-word;
+    }
+
+    .orders-table-wrap{
+      overflow-x:auto;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:700px;
+    }
+
+    thead{
+      background:linear-gradient(90deg,#8B4513,#D2691E);
+      color:white;
+    }
+
+    th, td{
+      padding:14px 12px;
+      text-align:center;
+      border-bottom:1px solid #eee;
+    }
+
+    tbody tr:hover{
+      background:#fff4ea;
+    }
+
+    .status{
+      padding:6px 14px;
+      border-radius:20px;
+      display:inline-block;
+      font-weight:700;
+      font-size:14px;
+    }
+
+    .status-delivered,
+    .status-paid{
+      background:#e8f9ea;
+      color:#1e7c34;
+    }
+
+    .status-pending{
+      background:#fff3dc;
+      color:#c77700;
+    }
+
+    .status-cancelled{
+      background:#ffe8e8;
+      color:#c62828;
+    }
+
+    .empty{
+      text-align:center;
+      color:#777;
+      font-size:16px;
+      font-weight:600;
+      padding:18px 0;
+    }
+
+    @media(max-width:992px){
+      .stats-grid{
+        grid-template-columns:1fr;
+      }
+
+      .profile-grid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media(max-width:768px){
+      .content{
+        margin-left:0;
+        width:100%;
+        padding:18px;
+      }
+
+      .topbar h1{
+        font-size:24px;
+      }
+
+      .welcome-chip{
+        font-size:16px;
+      }
+
+      .profile-grid{
+        grid-template-columns:1fr;
+      }
+
+      .section-box{
+        padding:20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  {% include 'sidebar.html' %}
+
+  <div class="main">
+    <div class="content">
+
+      <div class="topbar">
+        <h1>User Dashboard</h1>
+        <div class="welcome-chip">Hi, {{ user_name|default:"User" }}</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-title">Total Orders</div>
+          <div class="stat-value">{{ total_orders }}</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-title">Total Spent</div>
+          <div class="stat-value">₹{{ total_spent }}</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-title">Total Feedbacks</div>
+          <div class="stat-value">{{ total_feedbacks }}</div>
+        </div>
+      </div>
+
+      <div class="section-box">
+        <h2>My Profile</h2>
+
+        <div class="profile-grid">
+          <div class="profile-field">
+            <div class="profile-label">Customer ID</div>
+            <div class="profile-value">{{ customer.0 }}</div>
+          </div>
+
+          <div class="profile-field">
+            <div class="profile-label">Name</div>
+            <div class="profile-value">{{ customer.1 }}</div>
+          </div>
+
+          <div class="profile-field">
+            <div class="profile-label">Email</div>
+            <div class="profile-value">{{ customer.2 }}</div>
+          </div>
+
+          <div class="profile-field">
+            <div class="profile-label">Address</div>
+            <div class="profile-value">{{ customer.3|default:"Not Added" }}</div>
+          </div>
+
+          <div class="profile-field">
+            <div class="profile-label">Phone Number</div>
+            <div class="profile-value">{{ customer.4|default:"Not Added" }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-box">
+        <h2>Recent Orders</h2>
+
+        <div class="orders-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Order No</th>
+                <th>Amount</th>
+                <th>Order Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in recent_orders %}
+              <tr>
+                <td>{{ order.0 }}</td>
+                <td>₹{{ order.1 }}</td>
+                <td>{{ order.2 }}</td>
+                <td>
+                  {% if order.3 == "Delivered" or order.3 == "Paid" %}
+                    <span class="status status-delivered">{{ order.3 }}</span>
+                  {% elif order.3 == "Pending" %}
+                    <span class="status status-pending">{{ order.3 }}</span>
+                  {% elif order.3 == "Cancelled" %}
+                    <span class="status status-cancelled">{{ order.3 }}</span>
+                  {% else %}
+                    <span class="status status-pending">{{ order.3 }}</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="4" class="empty">No recent orders found</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

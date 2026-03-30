@@ -1,0 +1,443 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vinegar Pickles | Chatpata Junction</title>
+<script src="{% static 'JS/cart.js' %}"></script>
+<style>
+.products{
+  max-width:1300px;
+  margin:auto;
+  padding:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:25px;
+}
+
+.product-card{
+  background:#fff8dc;
+  border-radius:25px;
+  overflow:hidden;
+  box-shadow:0 12px 30px rgba(0,0,0,0.3);
+  transition:0.3s;
+}
+
+.product-card:hover{
+  transform:translateY(-6px);
+}
+
+.product-img img{
+  width:100%;
+  height:230px;
+  object-fit:cover;
+  display:block;
+}
+
+.product-info{
+  padding:20px;
+  background:#fff6d5;
+}
+
+.tag{
+  display:inline-block;
+  background:crimson;
+  color:white;
+  padding:6px 14px;
+  border-radius:20px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.product-info p{
+  margin:4px 0;
+  font-size:15px;
+  color:#333;
+}
+
+.weight{
+  font-size:14px;
+}
+
+.price{
+  font-size:30px;
+  color:crimson;
+  font-weight:800;
+  margin:10px 0;
+}
+
+.qty-btn{
+      padding: 4px 10px;
+      border: none;
+      background: #ffd700;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+      margin-right:5px;
+      margin-top:8px;
+    }
+
+    .remove-btn{
+      background: crimson;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      float: right;
+      margin-top:8px;
+    }
+
+
+.btn-group{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+
+.btn-group button{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:18px;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+  color:white;
+  transition:0.3s;
+}
+
+.add-cart{
+  background:linear-gradient(135deg,#32cd32,#1e8f1e);
+}
+
+.buy-now{
+  background:linear-gradient(135deg,#ff4500,#ff0000);
+}
+
+.btn-group button:hover{
+  opacity:0.9;
+  transform:translateY(-2px);
+}
+
+@media(max-width:768px){
+  .btn-group{
+    flex-direction:column;
+  }
+}
+</style>
+</head>
+
+<body>
+
+{% include 'header.html' %}
+
+<div class="products">
+  <div class="product-card beet">
+    <div class="product-img">
+      <img src="{% static 'images/by-preservation/vinegar-based/beetroot.png' %}" alt="Beetroot Pickle">
+    </div>
+    <div class="product-info">
+      <span class="tag">Beetroot</span>
+      <p>Vinegar-based Beetroot Pickle</p>
+      <p class="weight">Weight: 400g</p>
+      <div class="price">₹249</div>
+      <div class="btn-group">
+        <button class="add-cart" onclick="addToCart('Beetroot Pickle',249)" type="button">🛒 Add to Cart</button>
+        <button class="buy-now" onclick="buyNow('Beetroot Pickle',249)" type="button">⚡ Buy Now</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card capsicum">
+    <div class="product-img">
+      <img src="{% static 'images/by-preservation/vinegar-based/capsicum.png' %}" alt="Capsicum Pickle">
+    </div>
+    <div class="product-info">
+      <span class="tag">Capsicum</span>
+      <p>Vinegar-based Capsicum Pickle</p>
+      <p class="weight">Weight: 500g</p>
+      <div class="price">₹299</div>
+      <div class="btn-group">
+        <button class="add-cart" onclick="addToCart('Capsicum Pickle',299)" type="button">🛒 Add to Cart</button>
+        <button class="buy-now" onclick="buyNow('Capsicum Pickle',299)" type="button">⚡ Buy Now</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card cherry">
+    <div class="product-img">
+      <img src="{% static 'images/by-preservation/vinegar-based/cherry_pepper.png' %}" alt="Cherry Pepper Pickle">
+    </div>
+    <div class="product-info">
+      <span class="tag">Cherry Pepper</span>
+      <p>Vinegar-based Cherry Pepper Pickle</p>
+      <p class="weight">Weight: 500g</p>
+      <div class="price">₹299</div>
+      <div class="btn-group">
+        <button class="add-cart" onclick="addToCart('Cherry Pepper Pickle',299)" type="button">🛒 Add to Cart</button>
+        <button class="buy-now" onclick="buyNow('Cherry Pepper Pickle',299)" type="button">⚡ Buy Now</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card gherkins">
+    <div class="product-img">
+      <img src="{% static 'images/by-preservation/vinegar-based/gherkins.png' %}" alt="Gherkins Pickle">
+    </div>
+    <div class="product-info">
+      <span class="tag">Gherkins</span>
+      <p>Vinegar-based Gherkins Pickle</p>
+      <p class="weight">Weight: 400g</p>
+      <div class="price">₹199</div>
+      <div class="btn-group">
+        <button class="add-cart" onclick="addToCart('Gherkins Pickle',199)" type="button">🛒 Add to Cart</button>
+        <button class="buy-now" onclick="buyNow('Gherkins Pickle',199)" type="button">⚡ Buy Now</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card jal">
+    <div class="product-img">
+      <img src="{% static 'images/by-preservation/vinegar-based/jalapeno.png' %}" alt="Jalapeno Pickle">
+    </div>
+    <div class="product-info">
+      <span class="tag">Jalapeno</span>
+      <p>Vinegar-based Jalapeno Pickle</p>
+      <p class="weight">Weight: 400g</p>
+      <div class="price">₹299</div>
+      <div class="btn-group">
+        <button class="add-cart" onclick="addToCart('Jalapeno Pickle',299)" type="button">🛒 Add to Cart</button>
+        <button class="buy-now" onclick="buyNow('Jalapeno Pickle',299)" type="button">⚡ Buy Now</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card olive">
+    <div class="product-img">
+      <img src="{% static 'images/by-preservation/vinegar-based/olive.png' %}" alt="Olive Pickle">
+    </div>
+    <div class="product-info">
+      <span class="tag">Olive</span>
+      <p>Vinegar-based Olive Pickle</p>
+      <p class="weight">Weight: 400g</p>
+      <div class="price">₹199</div>
+      <div class="btn-group">
+        <button class="add-cart" onclick="addToCart('Olive Pickle',199)" type="button">🛒 Add to Cart</button>
+        <button class="buy-now" onclick="buyNow('Olive Pickle',199)" type="button">⚡ Buy Now</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card pear">
+    <div class="product-img">
+      <img src="{% static 'images/by-preservation/vinegar-based/pear.png' %}" alt="Pear Pickle">
+    </div>
+    <div class="product-info">
+      <span class="tag">Pear</span>
+      <p>Vinegar-based Pear Pickle</p>
+      <p class="weight">Weight: 400g</p>
+      <div class="price">₹199</div>
+      <div class="btn-group">
+        <button class="add-cart" onclick="addToCart('Pear Pickle',199)" type="button">🛒 Add to Cart</button>
+        <button class="buy-now" onclick="buyNow('Pear Pickle',199)" type="button">⚡ Buy Now</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'footer.html' %}
+<script>  
+const shopBtn = document.getElementById("shopBtn");
+  const shopMenu = document.getElementById("shopMenu");
+  const cartBtn = document.getElementById("cartBtn");
+  const cartSidebar = document.getElementById("cartSidebar");
+  const cartItems = document.getElementById("cartItems");
+  const cartCount = document.getElementById("cartCount");
+  const cartTotal = document.getElementById("cartTotal");
+  const searchInput = document.getElementById("searchInput");
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  function searchProducts() {
+    if (!searchInput) return;
+    const input = searchInput.value.toLowerCase();
+    const cards = document.querySelectorAll(".product-card");
+
+    cards.forEach(card => {
+      const text = card.innerText.toLowerCase();
+      card.style.display = text.includes(input) ? "" : "none";
+    });
+  }
+
+  if (cartBtn && cartSidebar) {
+    cartBtn.addEventListener("click", function () {
+      cartSidebar.classList.add("active");
+      loadCart();
+    });
+  }
+
+  function openCart() {
+    if (cartSidebar) {
+      cartSidebar.classList.add("active");
+      loadCart();
+    }
+  }
+
+  function closeCart() {
+    if (cartSidebar) {
+      cartSidebar.classList.remove("active");
+    }
+  }
+
+  function addToCart(name, price) {
+    fetch("{% url 'add_to_cart' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({
+        name: name,
+        price: price
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      renderCart(data.cart, data.count, data.total);
+      openCart();
+    });
+  }
+
+  function buyNow(name, price) {
+    fetch("{% url 'add_to_cart' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({
+        name: name,
+        price: price
+      })
+    })
+    .then(response => response.json())
+    .then(() => {
+      window.location.href = "{% url 'kok' %}";
+    });
+  }
+
+  function loadCart() {
+    fetch("{% url 'get_cart_data' %}")
+      .then(response => response.json())
+      .then(data => {
+        renderCart(data.cart, data.count, data.total);
+      });
+  }
+
+  function renderCart(cart, count, total) {
+    if (!cartItems || !cartCount || !cartTotal) return;
+
+    cartItems.innerHTML = "";
+
+    if (cart.length === 0) {
+      cartItems.innerHTML = "<p>Your cart is empty.</p>";
+    } else {
+      cart.forEach((item, index) => {
+        cartItems.innerHTML += `
+          <div class="cart-item">
+            <h4>${item.name}</h4>
+            ₹${item.price} × ${item.qty}<br><br>
+            <button class="qty-btn" onclick="changeQty(${index},1)">+</button>
+            <button class="qty-btn" onclick="changeQty(${index},-1)">−</button>
+            <button class="remove-btn" onclick="removeItem(${index})">Delete</button>
+          </div>
+        `;
+      });
+    }
+
+    cartTotal.innerText = total;
+    cartCount.innerText = count;
+  }
+
+  function changeQty(index, change) {
+    fetch("{% url 'change_cart_qty' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({
+        index: index,
+        change: change
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      renderCart(data.cart, data.count, data.total);
+    });
+  }
+
+  function removeItem(index) {
+    fetch("{% url 'remove_cart_item' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({
+        index: index
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      renderCart(data.cart, data.count, data.total);
+    });
+  }
+
+  if (shopBtn && shopMenu) {
+    shopBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      shopMenu.classList.toggle("show");
+    });
+  }
+
+  function toggleSub(event, id) {
+    event.stopPropagation();
+    const submenu = document.getElementById(id);
+    if (submenu) {
+      submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+    }
+  }
+
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".dropdown")) {
+      if (shopMenu) {
+        shopMenu.classList.remove("show");
+      }
+
+      document.querySelectorAll(".submenu-content").forEach(function (menu) {
+        menu.style.display = "none";
+      });
+    }
+  });
+
+  loadCart();
+</script>
+</body>
+</html>
